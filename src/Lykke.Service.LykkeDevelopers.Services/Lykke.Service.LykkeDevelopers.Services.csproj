@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>Lykke.Service.LykkeDevelopers.Services</AssemblyName>
+    <RootNamespace>Lykke.Service.LykkeDevelopers.Services</RootNamespace>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lykke.Service.LykkeDevelopers.Core\Lykke.Service.LykkeDevelopers.Core.csproj" />
+  </ItemGroup>
+</Project>
