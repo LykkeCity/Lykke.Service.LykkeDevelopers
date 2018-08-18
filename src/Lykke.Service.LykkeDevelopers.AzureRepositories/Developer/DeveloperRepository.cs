@@ -23,11 +23,6 @@ namespace Lykke.Service.LykkeDevelopers.AzureRepositories.Developer
             return await _tableStorage.GetDataAsync(pk, DeveloperEntity.GenerateRowKey(rowKey));
         }
 
-        public Task<IDeveloperEntity> GetDevByTelegramAcc(string telegramAcc)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<IDeveloperEntity>> GetDevelopers()
         {
             var pk = DeveloperEntity.GeneratePartitionKey();
@@ -64,8 +59,6 @@ namespace Lykke.Service.LykkeDevelopers.AzureRepositories.Developer
                 }
                 await _tableStorage.InsertOrMergeAsync(dev);
             }
-
-
             catch
             {
                 return false;

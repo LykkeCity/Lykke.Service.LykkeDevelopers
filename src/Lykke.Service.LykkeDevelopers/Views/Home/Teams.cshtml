@@ -1,0 +1,173 @@
+﻿@using Lykke.Service.LykkeDevelopers.Models
+@using Lykke.Service.LykkeDevelopers.Extentions
+@using Newtonsoft.Json
+@model TeamsModel
+
+@{
+    ViewBag.Title = "Lykke Developers";
+}
+
+<h2>Teams</h2>
+    
+<div class="editItems">
+
+</div>
+
+@section Scripts {
+<script type="text/javascript">
+    $(function () {
+
+        function myAlertTop(text) {
+            txt = document.createTextNode(text);
+            var span = $(".myAlert-top").children('span');
+            span.html('');
+            span.append(txt);
+
+            $(".myAlert-top").show();
+
+            setTimeout(function () {
+                //$(".custom-alert").alert('close'); <--- Do not use this
+
+                $(".myAlert-top").slideUp(500, function () {
+                    $(this).hide();
+                });
+            }, 5000);
+        }
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        function elemCancel(elem) {
+            $(elem).parent().parent().remove();
+        }
+
+        $.generateTable = function (json) {
+            var list = eval('( ' + json + ')');
+            var html =
+                '<table class="table table-stripped table-bordered"><tr><th>Name</th><th>ID</th><th>Actions</th></tr>';
+            for (var i = 0; i < list.length; i++) {
+                var elem = list[i];
+                html += '<tr elemId="' + elem.RowKey + '"> ' +
+                    '<td class="col-md-5 name"><span class="viewMode" class = "name-cert" >' + elem.Name + '</span><input type="text" class="editMode form-control"/></td>' +
+                    '<td class="col-md-5 teamID"><span class="viewMode" class = "name-cert" >' + elem.RowKey + '</span><input type="text" class="editMode form-control" readonly/></td>' +
+                    '<td class="actions" style="text-align:center">' +
+                        '<a href="javascript:;" class="elemEdit"></a> ' +
+                        '<a href="javascript:;" class="elemDelete"></a>' +
+                        '<a href="javascript:;" style="display:none" class="elemSave"></a>' +
+                        '<a href="javascript:;" style="display:none" class="elemCancel"></a>' +
+                    '</tr>';
+            }
+
+            html +=
+                '<tr elemId="*">' +
+                    '<td class="name"><input class="form-control" placeholder="Name"  type="text"/></td>' +
+                    '<td class="teamID"><input class="form-control" placeholder="ID" type="text" readonly/></td>' +
+                    '<td class="actions" style="text-align:center"><a href="javascript:;" class="elemSave"></a><a href="javascript:;" class="elemCancel"></a></td></tr>';
+
+            html += '</table>';
+            var parent = $('.editItems');
+            parent.empty();
+            parent.append($(html));
+
+            $('.elemEdit').click(function() {
+                var parent = $(this).parents('tr');
+                parent.find('.editMode').val(parent.find('td.teamID span').text());
+                parent.find('td.name input').val(parent.find('td.name span').text());
+                parent.find('.viewMode').hide();
+                parent.find('.editMode').show();
+                parent.find('.elemEdit').hide();
+                parent.find('.elemDelete').hide();
+                parent.find('.elemSave').show();
+                parent.find('.elemCancel').show();
+            });
+
+            $('.elemDelete').click(function() {
+                var elemId = $(this).parents('tr').attr('elemId');
+                var url = '@Url.Action("RemoveTeam")';
+                var name = $(this).parents('tr').find('td.name span').text();
+                if (confirm('The team ' + name + ' will be deleted.')) {
+                    $.post(url, { 'rowKey': elemId }, function (data) {
+                        $.generateTable(data.Json);
+                        $.showMessage('success', 'Team removed', []);
+                    });
+                }
+            });
+
+            $('.elemSave').click(function() {
+                var elemId = $(this).parents('tr').attr('elemId');
+                if (!$.validateUser(elemId)) {
+                    return;
+                }
+                var url = '@Url.Action("SaveTeam", "Home")';
+                console.log($('tr[elemId="' + elemId + '"] td.name input').val());
+                if (confirm('Save team?')) {
+                    $.post(url,
+                        {
+                            'team': {
+                                'RowKey': elemId,
+                                'Name': $('tr[elemId="' + elemId + '"] td.name input').val(),
+                            }
+                        },
+                        function (data) {
+                            var row = $('.editItems table tr[elemId="' + elemId + '"]');
+                            if (data.Result == '@ResultCode.TeamAlreadyExists') {
+                                $.showMessage('error', 'Team with this name aready exists', []);
+                                row.find('td.name input').addClass('error');
+                            }
+                            else if (data.Result == '@ResultCode.InvalidInput') {
+                                $.showMessage('error', 'InvalidInput', []);
+                            }
+                            else {
+                                $.generateTable(data.Json);
+                                $.showMessage('success', 'Team saved', []);
+                            }
+
+                        });
+                }
+            });
+
+            $(".elemCancel").click(function() {
+                var parent = $(this).parents('tr');
+                if (parent.attr('elemId') == '*') {
+                    var inputs = parent.find('input[type=text]');
+                    inputs.val('');
+                    inputs.removeClass('error');
+                    var checkBoxes = parent.find('input[type=checkbox]');
+                    checkBoxes.removeAttr('checked');
+                } else {
+                    parent.find('.editMode').val(parent.find('td.teamID span').text());
+                    parent.find('td.name input').val(parent.find('td.name span').text());
+
+                    parent.find('.viewMode').show();
+                    parent.find('.editMode').hide();
+                    parent.find('.elemEdit').show();
+                    parent.find('.elemDelete').show();
+                    parent.find('.elemSave').hide();
+                    parent.find('.elemCancel').hide();
+                }
+            });
+
+
+        }
+
+        $.validateUser = function (userId) {
+            var row = $('.editItems table tr[elemId="' + userId + '"]');
+            if (row.length == 0) {
+                return;
+            }
+
+            var valid = true;
+            if (row.find('td.name input').val().trim() == '') {
+                row.find('td.name input').addClass('error');
+                valid = false;
+            } else {
+                row.find('td.name input').removeClass('error');
+            }
+
+
+            return valid;
+        };
+
+        $.generateTable('@Html.Raw(JsonConvert.SerializeObject(Model.Teams).Replace("'", "\\'").Replace("\"", "\\\""))');
+    });
+</script>
+}

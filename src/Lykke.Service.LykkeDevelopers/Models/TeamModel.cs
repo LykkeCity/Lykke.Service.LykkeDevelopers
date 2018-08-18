@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Lykke.Service.LykkeDevelopers.Models
 {
-    public class DevelopersModel
+    public class TeamModel
     {
-        public List<DeveloperModel> Developers;
-        public List<TeamModel> Teams;
+        public string RowKey { get; set; }
+        public string Name { get; set; }
     }
 }

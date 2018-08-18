@@ -2,8 +2,10 @@
 using AzureStorage.Tables;
 using Lykke.Common.Log;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Developer;
+using Lykke.Service.LykkeDevelopers.AzureRepositories.Team;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.User;
 using Lykke.Service.LykkeDevelopers.Core.Developer;
+using Lykke.Service.LykkeDevelopers.Core.Team;
 using Lykke.Service.LykkeDevelopers.Core.User;
 using Lykke.Service.LykkeDevelopers.Settings;
 using Lykke.SettingsReader;
@@ -38,6 +40,12 @@ namespace Lykke.Service.LykkeDevelopers.Modules
                        "Developer",
                        c.Resolve<ILogFactory>())))
                        .As<IDeveloperRepository>()
+                       .SingleInstance();
+            builder.Register(c =>
+               new TeamRepository(AzureTableStorage<TeamEntity>.Create(userConnectionString,
+                       "Team",
+                       c.Resolve<ILogFactory>())))
+                       .As<ITeamRepository>()
                        .SingleInstance();
 
         }
