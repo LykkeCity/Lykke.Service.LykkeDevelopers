@@ -100,7 +100,6 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                     {
                         return View(new SignInModel());
                     }
-
                 }
 
                 var passwordHash = $"{password}{user.Salt}".GetHash();
