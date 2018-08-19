@@ -35,8 +35,8 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
 
         }
 
-        [HttpGet]
         [Route("Home/Developers")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Developers()
         {
             var devs = await GetAllDevs();
@@ -44,8 +44,6 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
             return View(new DevelopersModel { Developers = devs, Teams = teams });
         }
 
-        [HttpGet]
-        [Route("Home/Teams")]
         public async Task<IActionResult> Teams()
         {
             var teams = await GetAllTeams();            

@@ -132,14 +132,12 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
 
         
         [AllowAnonymous]
-        [HttpGet]
         public IActionResult AccessDenied()
         {
             return View();
         }
 
         [HttpGet]
-        [Route("Account/ChangePassword")]
         public IActionResult ChangePassword()
         {
             return View();
@@ -177,8 +175,6 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("Account/SignOut")]
         public async Task<IActionResult> SignOut()
         {
             try
