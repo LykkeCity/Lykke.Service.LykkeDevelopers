@@ -136,24 +136,24 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         public async Task<bool> SaveDeveloper(DeveloperModel developer)
         {
             var checkDev = await GetDevelopers();
-            if (String.IsNullOrWhiteSpace(dev.RowKey))
+            if (String.IsNullOrWhiteSpace(developer.RowKey))
             {
-                dev.RowKey = "";
+                developer.RowKey = "";
             }
 
-            if (String.IsNullOrWhiteSpace(dev.Email))
+            if (String.IsNullOrWhiteSpace(developer.Email))
             {
-                dev.Email = "";
+                developer.Email = "";
             }
 
-            if (String.IsNullOrWhiteSpace(dev.TelegramAcc))
+            if (String.IsNullOrWhiteSpace(developer.TelegramAcc))
             {
-                dev.TelegramAcc = "";
+                developer.TelegramAcc = "";
             }
 
-            if (String.IsNullOrWhiteSpace(dev.GithubAcc))
+            if (String.IsNullOrWhiteSpace(developer.GithubAcc))
             {
-                dev.GithubAcc = "";
+                developer.GithubAcc = "";
             }
 
             foreach (var devToCheck in checkDev)
