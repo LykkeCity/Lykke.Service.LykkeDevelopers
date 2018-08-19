@@ -1,4 +1,5 @@
-﻿using Lykke.Service.LykkeDevelopers.Contract.Models;
+﻿using Lykke.Service.LykkeDevelopers.Client.Api;
+using Lykke.Service.LykkeDevelopers.Contract.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,18 +11,13 @@ namespace Lykke.Service.LykkeDevelopers.Client
     public interface ILykkeDevelopersClient
     {
         /// <summary>
-        /// returns all developers
+        /// Api for developers management
         /// </summary>
-        /// <returns>returns a list of developers</returns>
-        Task<List<DeveloperModel>> GetDevelopersAsync();
+        IDeveloperApi Developer { get; }
 
         /// <summary>
-        /// creates new developer
+        /// Api for teams management
         /// </summary>
-        /// <param name="model">The model that describes an developer</param>
-        /// <returns>returns list of developers</returns>
-        Task<List<DeveloperModel>> CreateDeveloperAsync(DeveloperModel model);
-        
-        Task<string> Test(string id);
+        ITeamApi Team { get; }
     }
 }

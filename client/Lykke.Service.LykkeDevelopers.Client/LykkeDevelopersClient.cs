@@ -1,11 +1,5 @@
-﻿using Lykke.Service.LykkeDevelopers.Client.Api;
-using Lykke.Service.LykkeDevelopers.Contract.Models;
-using Microsoft.Extensions.PlatformAbstractions;
-using Refit;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using Lykke.HttpClientGenerator;
+using Lykke.Service.LykkeDevelopers.Client.Api;
 
 namespace Lykke.Service.LykkeDevelopers.Client
 {
@@ -14,47 +8,21 @@ namespace Lykke.Service.LykkeDevelopers.Client
     /// </summary>
     public class LykkeDevelopersClient : ILykkeDevelopersClient
     {
-        private readonly HttpClient _httpClient;
-        private readonly IHomeApi _homeApi;
-        private readonly ApiRunner _runner;
+        private HttpClientGenerator.HttpClientGenerator httpClientGenerator;
+
+        public IDeveloperApi Developer { get; set; }
+
+        public ITeamApi Team { get; set; }
 
         public LykkeDevelopersClient(LykkeDevelopersServiceClientSettings settings)
         {
-            if (settings == null)
-                throw new ArgumentNullException(nameof(settings));
-
-            if (String.IsNullOrEmpty(settings.ServiceUrl))
-                throw new ArgumentException("Service URL required");
-
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(settings.ServiceUrl),
-                DefaultRequestHeaders =
-                {
-                    {
-                        "User-Agent",
-                        $"{PlatformServices.Default.Application.ApplicationName}/{PlatformServices.Default.Application.ApplicationVersion}"
-                    }
-                }
-            };
-
-            _homeApi = RestService.For<IHomeApi>(_httpClient);
-            _runner = new ApiRunner();
+            Developer = httpClientGenerator.Generate<IDeveloperApi>();
+            Team = httpClientGenerator.Generate<ITeamApi>();
         }
 
-        public async Task<List<DeveloperModel>> GetDevelopersAsync()
+        public LykkeDevelopersClient(HttpClientGenerator.HttpClientGenerator httpClientGenerator)
         {
-            return await _runner.RunAsync(() => _homeApi.GetAllDevs());
-        }
-
-        public async Task<List<DeveloperModel>> CreateDeveloperAsync(DeveloperModel model)
-        {
-            return await _runner.RunAsync(() => _homeApi.CreateAsync(model));
-        }
-
-        public async Task<string> Test(string id)
-        {
-            return await _runner.RunAsync(() => _homeApi.Test(id));
+            this.httpClientGenerator = httpClientGenerator;
         }
     }
 }

@@ -25,11 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lykke.Service.LykkeDevelope
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Tests", "4. Tests", "{8F9036B1-5106-4C69-B2D2-B78EE52687A0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{294820F5-BDC8-4659-B5D0-CECAE270BD43}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Client", "3. Client", "{294820F5-BDC8-4659-B5D0-CECAE270BD43}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lykke.Service.LykkeDevelopers.Client", "client\Lykke.Service.LykkeDevelopers.Client\Lykke.Service.LykkeDevelopers.Client.csproj", "{8AF50698-3329-41B4-9785-B40C33EA303F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lykke.Service.LykkeDevelopers.Contract", "Lykke.Service.LykkeDevelopers.Contract\Lykke.Service.LykkeDevelopers.Contract.csproj", "{782C576F-1793-4CC7-9D21-0A7263F929B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lykke.Service.LykkeDevelopers.Contract", "Lykke.Service.LykkeDevelopers.Contract\Lykke.Service.LykkeDevelopers.Contract.csproj", "{782C576F-1793-4CC7-9D21-0A7263F929B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

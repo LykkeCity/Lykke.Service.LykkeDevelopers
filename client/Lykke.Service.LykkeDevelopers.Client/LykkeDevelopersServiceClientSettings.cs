@@ -1,4 +1,5 @@
-﻿
+﻿using Lykke.SettingsReader.Attributes;
+
 namespace Lykke.Service.LykkeDevelopers.Client
 {
     /// <summary>
@@ -6,24 +7,8 @@ namespace Lykke.Service.LykkeDevelopers.Client
     /// </summary>
     public class LykkeDevelopersServiceClientSettings
     {
-        /// <summary>
-        /// Initializes a new instance of <see cref="LykkeDevelopersServiceClientSettings"/>.
-        /// </summary>
-        public LykkeDevelopersServiceClientSettings()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of <see cref="LykkeDevelopersServiceClientSettings"/> with service url.
-        /// </summary>
-        public LykkeDevelopersServiceClientSettings(string serviceUrl)
-        {
-            ServiceUrl = serviceUrl;
-        }
-
-        /// <summary>
-        /// The service url.
-        /// </summary>
+        /// <summary>Service url.</summary>
+        [HttpCheck("api/isalive")]
         public string ServiceUrl { get; set; }
     }
 }

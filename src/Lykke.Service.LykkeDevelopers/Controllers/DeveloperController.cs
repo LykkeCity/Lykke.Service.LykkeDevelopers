@@ -103,7 +103,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         [SwaggerOperation("IsDeveloperInTeamAsync")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        public async Task<bool> IsDeveloperInTeamAsync(string telegramAcc, string teamName)
+        public async Task<bool> IsDeveloperInTeam(string telegramAcc, string teamName)
         {            
             return await _developersService.IsDeveloperInTeamAsync(telegramAcc, teamName); 
         }
