@@ -1,6 +1,5 @@
 ﻿using Lykke.Common.Api.Contract.Responses;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Developer;
-using Lykke.Service.LykkeDevelopers.Client.Models;
 using Lykke.Service.LykkeDevelopers.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -13,6 +12,7 @@ using System.Threading.Tasks;
 using Lykke.Service.LykkeDevelopers.Core.Domain.Developer;
 using Lykke.Service.LykkeDevelopers.Extentions;
 using System;
+using Lykke.Service.LykkeDevelopers.Contract.Models;
 
 namespace Lykke.Service.LykkeDevelopers.Controllers
 {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Lykke.Service.LykkeDevelopers.Client.Models;
+using Lykke.Service.LykkeDevelopers.Contract.Models;
 using Lykke.Service.LykkeDevelopers.Core.Domain.Developer;
 using Lykke.Service.LykkeDevelopers.Core.Domain.Team;
 using System;

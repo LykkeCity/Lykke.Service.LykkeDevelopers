@@ -2,7 +2,7 @@
 using Lykke.Common.Api.Contract.Responses;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Developer;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Team;
-using Lykke.Service.LykkeDevelopers.Client.Models;
+using Lykke.Service.LykkeDevelopers.Contract.Models;
 using Lykke.Service.LykkeDevelopers.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
