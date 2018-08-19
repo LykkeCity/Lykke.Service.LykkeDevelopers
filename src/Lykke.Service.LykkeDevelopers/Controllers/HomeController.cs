@@ -26,7 +26,6 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
 
 
         public HomeController(
-            AppSettings appSettings,
             IDevelopersService developersService,
             ITeamsService teamsService)
         {
@@ -84,7 +83,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                         }
                     }                    
                 }
-                var devToSave = (await _developersService.GetDevAsync(dev.RowKey)) as DeveloperEntity ?? new DeveloperEntity();
+                var devToSave = (await _developersService.GetDeveloperAsync(dev.RowKey)) as DeveloperEntity ?? new DeveloperEntity();
 
                 devToSave.Email = dev.Email;
                 devToSave.FirstName = dev.FirstName;
@@ -93,7 +92,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                 devToSave.GithubAcc = dev.GithubAcc;
                 devToSave.Team = dev.Team;
 
-                await _developersService.SaveDeveloper(devToSave);
+                await _developersService.SaveDeveloperAsync(devToSave);
                 var result = await GetAllDevs();
                 var teams = await GetAllTeams();
                 return new JsonResult(new { Result = ResultCode.Ok, Json = JsonConvert.SerializeObject(result), Teams = JsonConvert.SerializeObject(teams) });
@@ -147,14 +146,14 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                             devToSave.TelegramAcc = dev.TelegramAcc;
                             devToSave.GithubAcc = dev.GithubAcc;
                             devToSave.Team = dev.Team;
-                            await _developersService.SaveDeveloper(devToSave);
+                            await _developersService.SaveDeveloperAsync(devToSave);
                         }
                     }
                 }
 
                 teamToSave.Name = team.Name;
 
-                await _teamsService.SaveTeam(teamToSave);
+                await _teamsService.SaveTeamAsync(teamToSave);
                 var result = await GetAllTeams();
 
                 return new JsonResult(new { Result = ResultCode.Ok, Json = JsonConvert.SerializeObject(result) });
@@ -172,7 +171,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         {
             try
             {
-                await _developersService.RemoveDeveloper(RowKey);
+                await _developersService.RemoveDeveloperAsync(RowKey);
                 var result = await GetAllDevs();
                 var teams = await GetAllTeams();
                 return new JsonResult(new { Result = ResultCode.Ok, Json = JsonConvert.SerializeObject(result), Teams = JsonConvert.SerializeObject(teams) });
@@ -205,11 +204,11 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                         devToSave.TelegramAcc = dev.TelegramAcc;
                         devToSave.GithubAcc = dev.GithubAcc;
                         devToSave.Team = dev.Team;
-                        await _developersService.SaveDeveloper(devToSave);
+                        await _developersService.SaveDeveloperAsync(devToSave);
                     }
                 }
 
-                await _teamsService.RemoveTeam(RowKey);
+                await _teamsService.RemoveTeamAsync(RowKey);
 
                 var result = await GetAllTeams();
                 return new JsonResult(new { Json = JsonConvert.SerializeObject(result) });
@@ -223,7 +222,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
 
         private async Task<List<DeveloperModel>> GetAllDevs()
         {
-            var result = await _developersService.GetDevelopers();
+            var result = await _developersService.GetDevelopersAsync();
 
             var devs = (from d in result
                          let dev = d as DeveloperEntity
@@ -243,7 +242,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
 
         private async Task<List<TeamModel>> GetAllTeams()
         {
-            var result = await _teamsService.GetTeams();
+            var result = await _teamsService.GetTeamsAsync();
 
             var teams = (from t in result
                         let team = t as TeamEntity

@@ -15,6 +15,8 @@ using Autofac.Extensions.DependencyInjection;
 using Lykke.Service.LykkeDevelopers.Modules;
 using Microsoft.Extensions.Configuration;
 using Lykke.Common.Log;
+using AutoMapper;
+using Lykke.Service.LykkeDevelopers.Profiles;
 
 namespace Lykke.Service.LykkeDevelopers
 {
@@ -49,6 +51,11 @@ namespace Lykke.Service.LykkeDevelopers
             var appSettings = Configuration.Get<AppSettings>();
 
             var _settings = ConstantReloadingManager.From(appSettings);
+
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfiles(typeof(ServiceProfile));
+            });
 
             services.AddAuthentication(opts =>
             {

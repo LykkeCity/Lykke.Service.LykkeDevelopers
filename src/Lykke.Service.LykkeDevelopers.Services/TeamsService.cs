@@ -21,17 +21,17 @@ namespace Lykke.Service.LykkeDevelopers.Services
             return _teamRepository.GetTeamAsync(rowKey);
         }
 
-        public Task<List<ITeamEntity>> GetTeams()
+        public Task<List<ITeamEntity>> GetTeamsAsync()
         {
             return _teamRepository.GetTeams();
         }
 
-        public Task<bool> RemoveTeam(string rowKey)
+        public Task<bool> RemoveTeamAsync(string rowKey)
         {
             return _teamRepository.RemoveTeam(rowKey);
         }
 
-        public Task<bool> SaveTeam(ITeamEntity team)
+        public Task<bool> SaveTeamAsync(ITeamEntity team)
         {
             return _teamRepository.SaveTeam(team);
         }

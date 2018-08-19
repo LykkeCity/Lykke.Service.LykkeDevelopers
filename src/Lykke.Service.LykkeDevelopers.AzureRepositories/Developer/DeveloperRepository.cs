@@ -58,8 +58,9 @@ namespace Lykke.Service.LykkeDevelopers.AzureRepositories.Developer
                 }
                 await _tableStorage.InsertOrMergeAsync(dev);
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine(ex);
                 return false;
             }
 
