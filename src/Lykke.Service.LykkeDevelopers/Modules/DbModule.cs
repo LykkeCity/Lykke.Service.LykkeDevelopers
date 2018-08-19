@@ -4,9 +4,9 @@ using Lykke.Common.Log;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Developer;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Team;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.User;
-using Lykke.Service.LykkeDevelopers.Core.Developer;
-using Lykke.Service.LykkeDevelopers.Core.Team;
-using Lykke.Service.LykkeDevelopers.Core.User;
+using Lykke.Service.LykkeDevelopers.Core.Domain.Developer;
+using Lykke.Service.LykkeDevelopers.Core.Domain.Team;
+using Lykke.Service.LykkeDevelopers.Core.Domain.User;
 using Lykke.Service.LykkeDevelopers.Settings;
 using Lykke.SettingsReader;
 

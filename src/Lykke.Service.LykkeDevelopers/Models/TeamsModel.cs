@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Lykke.Service.LykkeDevelopers.Client.Models;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Lykke.Service.LykkeDevelopers.Models
 {

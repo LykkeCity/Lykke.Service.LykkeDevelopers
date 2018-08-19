@@ -1,7 +1,9 @@
 ﻿using Lykke.Service.LykkeDevelopers.AzureRepositories.Developer;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Team;
-using Lykke.Service.LykkeDevelopers.Core.Developer;
-using Lykke.Service.LykkeDevelopers.Core.Team;
+using Lykke.Service.LykkeDevelopers.Client.Models;
+using Lykke.Service.LykkeDevelopers.Core.Domain.Developer;
+using Lykke.Service.LykkeDevelopers.Core.Domain.Team;
+using Lykke.Service.LykkeDevelopers.Core.Services;
 using Lykke.Service.LykkeDevelopers.Extentions;
 using Lykke.Service.LykkeDevelopers.Models;
 using Lykke.Service.LykkeDevelopers.Settings;
@@ -16,27 +18,23 @@ using System.Threading.Tasks;
 namespace Lykke.Service.LykkeDevelopers.Controllers
 {
     [Authorize]
-    //[Route("[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
-        private readonly AppSettings _appSettings;
-        private readonly IDeveloperRepository _developerRepository;
-        private readonly ITeamRepository _teamRepository;
+        private readonly IDevelopersService _developersService;
+        private readonly ITeamsService _teamsService;
 
 
         public HomeController(
             AppSettings appSettings,
-            IDeveloperRepository developerRepository,
-            ITeamRepository teamRepository)
+            IDevelopersService developersService,
+            ITeamsService teamsService)
         {
-            _appSettings = appSettings;
-            _developerRepository = developerRepository;
-            _teamRepository = teamRepository;
-
+            _developersService = developersService;
+            _teamsService = teamsService;
         }
 
         [Route("Home/Developers")]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Developers()
         {
             var devs = await GetAllDevs();
@@ -44,6 +42,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
             return View(new DevelopersModel { Developers = devs, Teams = teams });
         }
 
+        [Route("Home/Teams")]
         public async Task<IActionResult> Teams()
         {
             var teams = await GetAllTeams();            
@@ -85,7 +84,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                         }
                     }                    
                 }
-                var devToSave = (await _developerRepository.GetDevAsync(dev.RowKey)) as DeveloperEntity ?? new DeveloperEntity();
+                var devToSave = (await _developersService.GetDevAsync(dev.RowKey)) as DeveloperEntity ?? new DeveloperEntity();
 
                 devToSave.Email = dev.Email;
                 devToSave.FirstName = dev.FirstName;
@@ -94,7 +93,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                 devToSave.GithubAcc = dev.GithubAcc;
                 devToSave.Team = dev.Team;
 
-                await _developerRepository.SaveDeveloper(devToSave);
+                await _developersService.SaveDeveloper(devToSave);
                 var result = await GetAllDevs();
                 var teams = await GetAllTeams();
                 return new JsonResult(new { Result = ResultCode.Ok, Json = JsonConvert.SerializeObject(result), Teams = JsonConvert.SerializeObject(teams) });
@@ -129,7 +128,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                     }
                 }
 
-                var teamToSave = (await _teamRepository.GetTeamAsync(team.RowKey)) as TeamEntity ?? new TeamEntity();
+                var teamToSave = (await _teamsService.GetTeamAsync(team.RowKey)) as TeamEntity ?? new TeamEntity();
 
                 //Renaming check wen need to rename team on alll developers
                 if (!String.IsNullOrWhiteSpace(teamToSave.RowKey) && team.Name != teamToSave.Name)
@@ -148,14 +147,14 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                             devToSave.TelegramAcc = dev.TelegramAcc;
                             devToSave.GithubAcc = dev.GithubAcc;
                             devToSave.Team = dev.Team;
-                            await _developerRepository.SaveDeveloper(devToSave);
+                            await _developersService.SaveDeveloper(devToSave);
                         }
                     }
                 }
 
                 teamToSave.Name = team.Name;
 
-                await _teamRepository.SaveTeam(teamToSave);
+                await _teamsService.SaveTeam(teamToSave);
                 var result = await GetAllTeams();
 
                 return new JsonResult(new { Result = ResultCode.Ok, Json = JsonConvert.SerializeObject(result) });
@@ -173,7 +172,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         {
             try
             {
-                await _developerRepository.RemoveDeveloper(RowKey);
+                await _developersService.RemoveDeveloper(RowKey);
                 var result = await GetAllDevs();
                 var teams = await GetAllTeams();
                 return new JsonResult(new { Result = ResultCode.Ok, Json = JsonConvert.SerializeObject(result), Teams = JsonConvert.SerializeObject(teams) });
@@ -191,7 +190,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         {
             try
             {
-                var teamToRemove = await _teamRepository.GetTeamAsync(RowKey);
+                var teamToRemove = await _teamsService.GetTeamAsync(RowKey);
                 var devs = await GetAllDevs();
                 foreach (var dev in devs)
                 {
@@ -206,11 +205,11 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                         devToSave.TelegramAcc = dev.TelegramAcc;
                         devToSave.GithubAcc = dev.GithubAcc;
                         devToSave.Team = dev.Team;
-                        await _developerRepository.SaveDeveloper(devToSave);
+                        await _developersService.SaveDeveloper(devToSave);
                     }
                 }
 
-                await _teamRepository.RemoveTeam(RowKey);
+                await _teamsService.RemoveTeam(RowKey);
 
                 var result = await GetAllTeams();
                 return new JsonResult(new { Json = JsonConvert.SerializeObject(result) });
@@ -224,11 +223,11 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
 
         private async Task<List<DeveloperModel>> GetAllDevs()
         {
-            var result = await _developerRepository.GetDevelopers();
+            var result = await _developersService.GetDevelopers();
 
             var devs = (from d in result
                          let dev = d as DeveloperEntity
-                         //orderby dev.Email
+                         orderby dev.Email
                          select new DeveloperModel
                          {
                              RowKey = dev.RowKey,
@@ -244,11 +243,11 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
 
         private async Task<List<TeamModel>> GetAllTeams()
         {
-            var result = await _teamRepository.GetTeams();
+            var result = await _teamsService.GetTeams();
 
             var teams = (from t in result
                         let team = t as TeamEntity
-                        //orderby dev.Email
+                        orderby team.Name
                         select new TeamModel
                         {
                             RowKey = team.RowKey,

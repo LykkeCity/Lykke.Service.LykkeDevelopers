@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Lykke.Service.LykkeDevelopers.Controllers
 {
-    internal class IgnoreLogActionAttribute : Attribute
+    class TeamController
     {
     }
 }

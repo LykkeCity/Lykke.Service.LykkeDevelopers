@@ -1,5 +1,5 @@
 ﻿using Lykke.Service.LykkeDevelopers.AzureRepositories.User;
-using Lykke.Service.LykkeDevelopers.Core.User;
+using Lykke.Service.LykkeDevelopers.Core.Domain.User;
 using Lykke.Service.LykkeDevelopers.Extentions;
 using Lykke.Service.LykkeDevelopers.Models;
 using Lykke.Service.LykkeDevelopers.Settings;
@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace Lykke.Service.LykkeDevelopers.Controllers
 {
     [Authorize]
-    [IgnoreLogAction]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AccountController : Controller
     {
         private string HomeUrl => Url.Action("Developers", "Home");
@@ -132,18 +132,21 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
 
         
         [AllowAnonymous]
+        [Route("Account/AccessDenied")]
         public IActionResult AccessDenied()
         {
             return View();
         }
 
         [HttpGet]
+        [Route("Account/ChangePassword")]
         public IActionResult ChangePassword()
         {
             return View();
         }
 
         [HttpPost]
+        [Route("Account/ChangePassword")]
         public async Task<IActionResult> ChangePassword(string oldPassword, string password)
         {
             try
@@ -175,6 +178,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
             }
         }
 
+        [Route("Account/SignOut")]
         public async Task<IActionResult> SignOut()
         {
             try

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Lykke.Service.LykkeDevelopers.Core.Team
+namespace Lykke.Service.LykkeDevelopers.Core.Domain.Team
 {
     public interface ITeamRepository
     {

@@ -1,9 +1,8 @@
 ﻿using AzureStorage;
-using Lykke.Service.LykkeDevelopers.Core.Team;
+using Lykke.Service.LykkeDevelopers.Core.Domain.Team;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Lykke.Service.LykkeDevelopers.AzureRepositories.Team

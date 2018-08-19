@@ -1,9 +1,7 @@
-﻿using Lykke.Service.LykkeDevelopers.Core.Team;
+﻿using Lykke.Service.LykkeDevelopers.Core.Domain.Team;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Lykke.Service.LykkeDevelopers.AzureRepositories.Team
 {

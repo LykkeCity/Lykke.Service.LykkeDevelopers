@@ -38,6 +38,7 @@
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\client\Lykke.Service.LykkeDevelopers.Client\Lykke.Service.LykkeDevelopers.Client.csproj" />
     <ProjectReference Include="..\Lykke.Service.LykkeDevelopers.AzureRepositories\Lykke.Service.LykkeDevelopers.AzureRepositories.csproj" />
     <ProjectReference Include="..\Lykke.Service.LykkeDevelopers.Core\Lykke.Service.LykkeDevelopers.Core.csproj" />
     <ProjectReference Include="..\Lykke.Service.LykkeDevelopers.Services\Lykke.Service.LykkeDevelopers.Services.csproj" />

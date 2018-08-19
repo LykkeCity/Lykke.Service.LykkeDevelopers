@@ -6,14 +6,6 @@
     <Version>1.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Domain\**" />
-    <Compile Remove="Services\**" />
-    <EmbeddedResource Remove="Domain\**" />
-    <EmbeddedResource Remove="Services\**" />
-    <None Remove="Domain\**" />
-    <None Remove="Services\**" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Lykke.Common" Version="7.0.2" />
   </ItemGroup>
 </Project>

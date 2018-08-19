@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Lykke.Service.LykkeDevelopers.Core.Developer
+﻿namespace Lykke.Service.LykkeDevelopers.Core.Domain.Developer
 {
     public interface  IDeveloperEntity: IEntity
     {

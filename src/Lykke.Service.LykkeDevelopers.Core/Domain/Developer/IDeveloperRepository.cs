@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Lykke.Service.LykkeDevelopers.Core.Developer
+namespace Lykke.Service.LykkeDevelopers.Core.Domain.Developer
 {
     public interface IDeveloperRepository
     {
