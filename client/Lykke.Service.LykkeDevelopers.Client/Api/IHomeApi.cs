@@ -24,7 +24,7 @@ namespace Lykke.Service.LykkeDevelopers.Client.Api
         [Post("/api/home")]
         Task<List<DeveloperModel>> CreateAsync(DeveloperModel model);
 
-        [Get("api/home/{id}")]
+        [Get("/api/home/{id}")]
         Task<string> Test(string id);
     }
 }

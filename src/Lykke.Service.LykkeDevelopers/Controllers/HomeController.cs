@@ -13,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace Lykke.Service.LykkeDevelopers.Controllers
 {
-    [Authorize]
-    //[Route("[controller]")]
+    //[Authorize]
+    [Route("/api/[controller]")]
     public class HomeController : Controller
     {
         private readonly AppSettings _appSettings;
@@ -31,14 +31,13 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         }
 
         [HttpGet]
-        [Route("Home/Test/{id}")]
+        [Route("{id}")]
         public async Task<string> Test(string id)
         {
             return !String.IsNullOrEmpty(id) ? id : "TestNullValue";
         }
 
         [HttpGet]
-        [Route("Home/Developers")]
         public async Task<IActionResult> Developers()
         {
             var devs = await GetAllDevs();
@@ -48,7 +47,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                 Console.WriteLine(r.Email);
             }
 
-            return View(new DevelopersModel { Developers = devs });
+            return Ok(devs);
         }
 
         [HttpPost]

@@ -33,20 +33,16 @@ namespace Lykke.Service.LykkeDevelopers.Modules
                 .As<ILog>()
                 .SingleInstance();
 
-            builder.Register(c =>
-                new UserRepository(AzureTableStorage<UserEntity>.Create(userConnectionString,
-                        "User",
-                        c.Resolve<ILogFactory>())))
-                        .As<IUserRepository>()
-                        .SingleInstance();
+            // Do not register entire settings in container, pass necessary settings to services which requires them
+            builder.RegisterInstance(_appSettings.CurrentValue)
+                    .AsSelf()
+                    .SingleInstance();
 
-            builder.Register(c =>
-               new DeveloperRepository(AzureTableStorage<DeveloperEntity>.Create(userConnectionString,
-                       "Developer",
-                       c.Resolve<ILogFactory>())))
-                       .As<IDeveloperRepository>()
-                       .SingleInstance();
+            builder.RegisterInstance(new UserRepository(AzureTableStorage<UserEntity>.Create(connectionString, "User", _log)))
+                .As<IUserRepository>().SingleInstance();
 
+            builder.RegisterInstance(new DeveloperRepository(AzureTableStorage<DeveloperEntity>.Create(connectionString, "Developer", _log)))
+                .As<IDeveloperRepository>().SingleInstance();
         }
     }
 }
