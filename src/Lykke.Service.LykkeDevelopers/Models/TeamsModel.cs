@@ -1,4 +1,4 @@
-﻿using Lykke.Service.LykkeDevelopers.Client.Models;
+﻿using Lykke.Service.LykkeDevelopers.Contract.Models;
 using System.Collections.Generic;
 
 namespace Lykke.Service.LykkeDevelopers.Models

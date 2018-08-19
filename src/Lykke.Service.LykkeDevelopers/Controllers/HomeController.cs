@@ -1,15 +1,9 @@
 ﻿using Lykke.Service.LykkeDevelopers.AzureRepositories.Developer;
 using Lykke.Service.LykkeDevelopers.Contract.Models;
-using Lykke.Service.LykkeDevelopers.Core.Developer;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Team;
-using Lykke.Service.LykkeDevelopers.Client.Models;
-using Lykke.Service.LykkeDevelopers.Core.Domain.Developer;
-using Lykke.Service.LykkeDevelopers.Core.Domain.Team;
 using Lykke.Service.LykkeDevelopers.Core.Services;
 using Lykke.Service.LykkeDevelopers.Extentions;
 using Lykke.Service.LykkeDevelopers.Models;
-using Lykke.Service.LykkeDevelopers.Settings;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
