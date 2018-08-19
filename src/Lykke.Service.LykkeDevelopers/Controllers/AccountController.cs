@@ -140,6 +140,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         }
 
         [HttpGet]
+        [Route("Account/ChangePassword")]
         public IActionResult ChangePassword()
         {
             return View();
@@ -150,24 +151,24 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         {
             try
             {
-                //var user = await _userRepository.GetUserByUserEmail(UserInfo.UserEmail, oldPassword.GetHash());
+                var user = await _userRepository.GetUserByUserEmail(Request.HttpContext.GetUserEmail() ?? "anonymous", oldPassword.GetHash());
 
-                //if (user == null)
-                //{
-                //    ViewData["incorrectPassword"] = true;
-                //    return View();
-                //}
+                if (user == null)
+                {
+                    ViewData["incorrectPassword"] = true;
+                    return View();
+                }
 
-                //byte[] salt = new byte[128 / 8];
+                byte[] salt = new byte[128 / 8];
 
-                //using (var rng = RandomNumberGenerator.Create())
-                //{
-                //    rng.GetBytes(salt);
-                //}
+                using (var rng = RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(salt);
+                }
 
-                //user.Salt = Convert.ToBase64String(salt);
-                //user.PasswordHash = $"{password}{user.Salt}".GetHash();
-                //await _userRepository.SaveUser(user);
+                user.Salt = Convert.ToBase64String(salt);
+                user.PasswordHash = $"{password}{user.Salt}".GetHash();
+                await _userRepository.SaveUser(user);
 
                 return Redirect(HomeUrl);
             }
@@ -178,6 +179,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         }
 
         [HttpGet]
+        [Route("Account/SignOut")]
         public async Task<IActionResult> SignOut()
         {
             try

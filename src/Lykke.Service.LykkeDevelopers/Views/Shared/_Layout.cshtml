@@ -7,14 +7,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Lykke Developers</title>
-
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/lib/jquery-ui/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
-
     @RenderSection("Header", false)
-
 </head>
 <body>
     <nav class="navbar navbar-lykke navbar-fixed-top">
@@ -28,8 +25,8 @@
                     {
                         <li><a asp-area="" asp-controller="Home" asp-action="Developers">Developers</a></li>
                         <li><a asp-area="" asp-controller="Home" asp-action="Teams">Teams</a></li>
-                        <li><a asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a></li>
-                        <li><a asp-area="" asp-controller="Account" asp-action="SignOut" onclick="javascript: myIFrame.location='https://www.google.com/accounts/Logout'; $.unlockJson();">Sign Out</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="ChangePassword" >Change Password</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="SignOut">Sign Out</a></li>
                     }
                 </ul>
             </div>
@@ -43,31 +40,28 @@
         </footer>
     </div>
 
-
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script type="text/javascript">
-		$.unlockJsonUrl = '@Url.Action("UnlockJson","Home")';
-		var fixedCls = '.navbar-fixed-top,.navbar-fixed-bottom';
-		var oldSSB = $.fn.modal.Constructor.prototype.setScrollbar;
-		$.fn.modal.Constructor.prototype.setScrollbar = function () {
-			oldSSB.apply(this);
-			if (this.bodyIsOverflowing && this.scrollbarWidth)
-				$(fixedCls).css('padding-right', this.scrollbarWidth);
-		}
+        var fixedCls = '.navbar-fixed-top,.navbar-fixed-bottom';
+        var oldSSB = $.fn.modal.Constructor.prototype.setScrollbar;
+        $.fn.modal.Constructor.prototype.setScrollbar = function () {
+            oldSSB.apply(this);
+            if (this.bodyIsOverflowing && this.scrollbarWidth)
+                $(fixedCls).css('padding-right', this.scrollbarWidth);
+        }
 
-		var oldRSB = $.fn.modal.Constructor.prototype.resetScrollbar;
-		$.fn.modal.Constructor.prototype.resetScrollbar = function () {
-			oldRSB.apply(this);
-			$(fixedCls).css('padding-right', '');
-		}
+        var oldRSB = $.fn.modal.Constructor.prototype.resetScrollbar;
+        $.fn.modal.Constructor.prototype.resetScrollbar = function () {
+            oldRSB.apply(this);
+            $(fixedCls).css('padding-right', '');
+        }
     </script>
     <script src="~/js/cookie.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/request.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-ui/js/jquery-ui.min.js"></script>
     <script src="~/lib/select2/js/select2.min.js"></script>
-
     @RenderSection("Scripts", required: false)
     <iframe name='myIFrame' id="myIFrame" style='display:none'></iframe>
 </body>
