@@ -10,11 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Lykke.Service.LykkeDevelopers.Controllers
 {
-    //[Authorize]
-    [Route("/api/[controller]")]
+    [Authorize]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
         private readonly IDevelopersService _developersService;
@@ -29,14 +30,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
             _teamsService = teamsService;
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<string> Test(string id)
-        {
-            return !String.IsNullOrEmpty(id) ? id : "TestNullValue"; 
-        }
-
-        [HttpGet]
+        [Route("Home/Developers")]
         public async Task<IActionResult> Developers()
         {
             var devs = await GetAllDevs();
@@ -58,6 +52,17 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
             try
             {
                 var checkDev = await GetAllDevs();
+
+                if (String.IsNullOrWhiteSpace(dev.RowKey))
+                {
+                    dev.RowKey = "";
+                }
+
+                if (String.IsNullOrWhiteSpace(dev.Email))
+                {
+                    dev.Email = "";
+                }
+
                 if (String.IsNullOrWhiteSpace(dev.TelegramAcc))
                 {
                     dev.TelegramAcc = "";
