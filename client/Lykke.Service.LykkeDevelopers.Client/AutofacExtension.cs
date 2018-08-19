@@ -38,4 +38,5 @@ namespace Lykke.Service.LykkeDevelopers.Client
                .As<ILykkeDevelopersClient>()
                .SingleInstance();
         }
+    }
 }
