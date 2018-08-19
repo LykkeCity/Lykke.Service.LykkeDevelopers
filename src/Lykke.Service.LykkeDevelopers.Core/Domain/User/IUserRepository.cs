@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Lykke.Service.LykkeDevelopers.Core.User
+namespace Lykke.Service.LykkeDevelopers.Core.Domain.User
 {
     /// <summary>
     /// User repository

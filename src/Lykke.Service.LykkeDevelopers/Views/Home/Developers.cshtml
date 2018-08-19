@@ -1,4 +1,5 @@
 ﻿@using Lykke.Service.LykkeDevelopers.Models
+@using Lykke.Service.LykkeDevelopers.Extentions
 @using Newtonsoft.Json
 @model DevelopersModel
 
@@ -8,57 +9,13 @@
 
 <h2>Developers</h2>
 
-<button type="button" class="col-md-1 btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
-<br /><br />
-      <div id="addModal" class="modal fade" role="dialog">
-          <div class="modal-dialog modal-lg">
-              <!-- Modal content-->
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      <h4 class="modal-title">Add new Developer</h4>
-                  </div>
-                  <div class="modal-body">
-                      <div class="form-group col-md-6">
-                          <label for="FirstName">First Name: </label>
-                          <input type="text" id="gitUrl" eTag="" class="form-control" placeholder="First Name" value="" maxlength="30" />
-                      </div>
 
-                      <div class="form-group col-md-6">
-                          <label for="LastName">Last Name: </label>
-                          <input type="text" id="branch" eTag="" class="form-control" placeholder="Last Name" value="" maxlength="30" />
-                      </div>
-
-                      <div class="form-group col-md-6">
-                          <label for="email">Email: </label>
-                          <input type="text" id="tag" eTag="" class="form-control" placeholder="new-dev@lykke.com" value="" maxlength="30" />
-                      </div>
-                      <div class="form-group col-md-6">
-                          <label for="TelegramAcc">Telegram account: </label>
-                          <input type="text" id="tag" eTag="" class="form-control" placeholder="Telegram account" value="" maxlength="30" />
-                      </div>
-                      <div class="form-group col-md-6">
-                          <label for="GithubAcc">Github account: </label>
-                          <input type="text" id="tag" eTag="" class="form-control" placeholder="Github account" value="" maxlength="30" />
-                      </div>
-                      <div class="form-group col-md-6">
-                          <label for="Team">Team: </label>
-                          <input type="text" id="tag" eTag="" class="form-control" placeholder="Team" value="" maxlength="30" />
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-primary" id="add">Save</button>
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  </div>
-              </div>
-          </div>
-      </div>
 <div class="editItems">
 
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
+<script type="text/javascript">
     $(function () {
 
         function myAlertTop(text) {
@@ -100,36 +57,49 @@
             makeKeyValuesInputAutocomplete();
         }
 
-        $.generateTable = function (json) {
+        $.generateTable = function (json, teams) {
             var list = eval('( ' + json + ')');
+            var listTeams = eval('( ' + teams + ')');
             var html =
                 '<table class="table table-stripped table-bordered"><tr><th>Email</th><th>First Name</th><th>Last Name</th><th>Telegram account</th><th>GitHub account</th><th>Team</th><th>Actions</th></tr>';
             for (var i = 0; i < list.length; i++) {
                 var elem = list[i];
                 html += '<tr elemId="' + elem.RowKey + '"> ' +
-                    '<td class="col-md-2"><span class="viewMode" class = "name-cert" >' + elem.Email + '</span><input type="text" class="editMode form-control"/></td>' +
-                    '<td class="col-md-2"><span class="viewMode" class = "name-cert" >' + elem.FirstName + '</span><input type="text" class="editMode form-control"/></td>' +
-                    '<td class="col-md-2"><span class="viewMode" class = "name-cert" >' + elem.LastName + '</span><input type="text" class="editMode form-control"/></td>' +
-                    '<td class="col-md-2"><span class="viewMode" class = "name-cert" >' + elem.TelegramAcc + '</span><input type="text" class="editMode form-control"/></td>' +
-                    '<td class="col-md-2"><span class="viewMode" class = "name-cert" >' + elem.GithubAcc + '</span><input type="text" class="editMode form-control"/></td>' +
-                    '<td class="col-md-2"><span class="viewMode" class = "name-cert" >' + elem.Team + '</span><input type="text" class="editMode form-control"/></td>' +
+                    '<td class="col-md-2 email"><span class="viewMode">' + elem.Email + '</span><input type="text" class="editMode form-control"/></td>' +
+                    '<td class="col-md-2 fName"><span class="viewMode">' + elem.FirstName + '</span><input type="text" class="editMode form-control"/></td>' +
+                    '<td class="col-md-2 lName"><span class="viewMode">' + elem.LastName + '</span><input type="text" class="editMode form-control"/></td>' +
+                    '<td class="col-md-2 tAcc"><span class="viewMode">' + elem.TelegramAcc + '</span><input type="text" class="editMode form-control"/></td>' +
+                    '<td class="col-md-2 gAcc"><span class="viewMode">' + elem.GithubAcc + '</span><input type="text" class="editMode form-control"/></td>' +
+                    '<td class="col-md-2 team"><span class="viewMode team1 ' + (elem.Team == 'Team was removed' ? 'red': '') + '">' + elem.Team + '</span>' +
+                    '<span class="editMode"><select class="team-select" name="state">';
+                for (var j = 0; j < listTeams.length; j++) {
+                    html += '<option value="' + listTeams[j].Name + '">' + listTeams[j].Name + '</option>';
+                }
+                             
+                html +=  '</select></span></td>' +
                     '<td class="actions" style="text-align:center">' +
                         '<a href="javascript:;" class="elemEdit"></a> ' +
                         '<a href="javascript:;" class="elemDelete"></a>' +
                         '<a href="javascript:;" style="display:none" class="elemSave"></a>' +
-                        '<a href="javascript:;" style="display:none" class="elemCancel"></a>' +                        
+                        '<a href="javascript:;" style="display:none" class="elemCancel"></a>' +
                     '</tr>';
 
             }
 
             html +=
                 '<tr elemId="*">' +
-            '<td class="email"><input class="form-control" placeholder="Email" type="text"/></td>' +
-                '<td class="fName"><input class="form-control" placeholder="First Name"  type="text"/></td>' +
-                '<td class="lName"><input class="form-control" placeholder="Last Name" type="text" /></td>' +
-                '<td class="tAcc"><input class="form-control" placeholder="Telegram account" type="text" /></td>' +
-                '<td class="gAcc"><input class="form-control" placeholder="Github account" type="text" /></td>' +
-                '<td class="team"><input class="form-control" placeholder="Team" type="text" /></td>' +
+                '<td class="col-md-2 email"><input class="form-control" placeholder="Email" type="text"/></td>' +
+                '<td class="col-md-2 fName"><input class="form-control" placeholder="First Name"  type="text"/></td>' +
+                '<td class="col-md-2 lName"><input class="form-control" placeholder="Last Name" type="text" /></td>' +
+                '<td class="col-md-2 tAcc"><input class="form-control" placeholder="Telegram account" type="text" /></td>' +
+                '<td class="col-md-2 gAcc"><input class="form-control" placeholder="Github account" type="text" /></td>' +
+                '<td class="col-md-2 team">' +
+                '<select class="team-select form-control" name="state">';
+            for (var j = 0; j < listTeams.length; j++) {
+                html += '<option value="' + listTeams[j].Name + '">' + listTeams[j].Name + '</option>';
+            }
+
+            html += '</select></td>' +
                 '<td class="actions" style="text-align:center"><a href="javascript:;" class="elemSave"></a><a href="javascript:;" class="elemCancel"></a></td></tr>';
 
             html += '</table>';
@@ -137,14 +107,57 @@
             parent.empty();
             parent.append($(html));
 
+            $('.team-select').select2({
+                placeholder: "Select Team",
+                width: '100%'
+            });;
+
             $('.elemEdit').click(function() {
                 var parent = $(this).parents('tr');
-                parent.find('.editMode').val(parent.find('td.email span').text());
-                parent.find('td.fName input').val(parent.find('td.fName span').text());
-                parent.find('td.lName input').val(parent.find('td.lName span').text());
-                parent.find('td.tAcc input').val(parent.find('td.tAcc span').text());
-                parent.find('td.gAcc input').val(parent.find('td.gAcc span').text());
-                parent.find('td.team input').val(parent.find('td.team span').text());
+                if (parent.find('td.email span').text() == 'null'){
+                    parent.find('.editMode').val('');
+                }
+                else {
+                    parent.find('.editMode').val(parent.find('td.email span').text());
+                }
+
+                if (parent.find('td.fName span').text() == 'null') {
+                    parent.find('td.fName input').val('');
+                }
+                else {
+                    parent.find('td.fName input').val(parent.find('td.fName span').text())
+                }
+
+                if (parent.find('td.lName span').text() == 'null') {
+                    parent.find('td.lName input').val('');
+                }
+                else {
+                    parent.find('td.lName input').val(parent.find('td.lName span').text());
+                }
+
+                if (parent.find('td.tAcc span').text() == 'null') {
+                    parent.find('td.tAcc input').val('');
+                }
+                else {
+                    parent.find('td.tAcc input').val(parent.find('td.tAcc span').text());
+                }
+
+                if (parent.find('td.gAcc span').text() == 'null') {
+                    parent.find('td.gAcc input').val('');
+                }
+                else {
+                    parent.find('td.gAcc input').val(parent.find('td.gAcc span').text());
+                }
+
+                console.log(parent.find('td.team .team1').text());
+                parent.find('td.team select').val(parent.find('td.team .team1').text());
+                console.log(parent.find('td.team select').val());
+
+                parent.find('td.team select').select2({
+                    placeholder: "Select Team",
+                    width: '100%'
+                });;
+
                 parent.find('.viewMode').hide();
                 parent.find('.editMode').show();
                 parent.find('.elemEdit').hide();
@@ -155,9 +168,14 @@
 
             $('.elemDelete').click(function() {
                 var elemId = $(this).parents('tr').attr('elemId');
-                var url = '@Url.Action("RemoveUser")';
-                if (confirm('The "' + elemId + '" user will be deleted.')) {
-                    $.post(url, { 'userEmail': elemId }, function(data) { $.populateUsers(data.json) });
+                var url = '@Url.Action("RemoveDeveloper")';
+                var fn = $(this).parents('tr').find('td.fName span').text();
+                var ln = $(this).parents('tr').find('td.lName span').text();
+                if (confirm('The developer ' + fn + ' ' + ln + ' will be deleted.')) {
+                    $.post(url, { 'rowKey': elemId }, function (data) {
+                        $.generateTable(data.Json, data.Teams);
+                        $.showMessage('success', 'Developer removed', []);
+                    });
                 }
             });
 
@@ -166,23 +184,41 @@
                 if (!$.validateUser(elemId)) {
                     return;
                 }
-                console.log(elemId);
                 var url = '@Url.Action("SaveDeveloper", "Home")';
-                $.post(url,
-                    {
-                        'dev': {
-                            'RowKey': elemId,
-                            'Email': $('tr[elemId="' + elemId + '"] td.email input').val(),
-                            'FirstName': $('tr[elemId="' + elemId + '"] td.fName input').val(),
-                            'LastName': $('tr[elemId="' + elemId + '"] td.lName input').val(),
-                            'TelegramAcc': $('tr[elemid="' + elemId + '"] td.tAcc input').val(),
-                            'GithubAcc': $('tr[elemId="' + elemId + '"] td.gAcc input').val(),
-                            'Team': $('tr[elemId="' + elemId + '"] td.team input').val(),
-                        }
-                    },                    
-                    function (data) {
-                        $.generateTable(data.Json);
-                    });
+                if (confirm('Save developer?')) {
+                    $.post(url,
+                        {
+                            'dev': {
+                                'RowKey': elemId,
+                                'Email': $('tr[elemId="' + elemId + '"] td.email input').val(),
+                                'FirstName': $('tr[elemId="' + elemId + '"] td.fName input').val(),
+                                'LastName': $('tr[elemId="' + elemId + '"] td.lName input').val(),
+                                'TelegramAcc': $('tr[elemid="' + elemId + '"] td.tAcc input').val(),
+                                'GithubAcc': $('tr[elemId="' + elemId + '"] td.gAcc input').val(),
+                                'Team': $('tr[elemId="' + elemId + '"] td.team select option:selected').val(),
+                            }
+                        },
+                        function (data) {
+                            var row = $('.editItems table tr[elemId="' + elemId + '"]');
+                            if (data.Result == '@ResultCode.EmailAlreadyExists') {
+                                $.showMessage('error', 'Developer with this email aready exists', []);
+                                row.find('td.email input').addClass('error');
+                            }
+                            else if (data.Result == '@ResultCode.TelegramAlreadyExists') { 
+                                $.showMessage('error', 'Developer with this Telegram account aready exists', []);
+                                row.find('td.tAcc input').addClass('error');
+                            }
+                            else if (data.Result == '@ResultCode.GitAlreadyExists') {
+                                $.showMessage('error', 'Developer with this Github account aready exists', []);
+                                row.find('td.gAcc input').addClass('error');
+                             }
+                            else {
+                                $.generateTable(data.Json, data.Teams);
+                                $.showMessage('success', 'Developer saved', []);
+                            }
+
+                        });
+                }
             });
 
             $(".elemCancel").click(function() {
@@ -200,7 +236,7 @@
                     parent.find('td.tAcc input').val(parent.find('td.tAcc span').text());
                     parent.find('td.gAcc input').val(parent.find('td.gAcc span').text());
                     parent.find('td.team input').val(parent.find('td.team span').text());
-                    
+
                     parent.find('.viewMode').show();
                     parent.find('.editMode').hide();
                     parent.find('.elemEdit').show();
@@ -220,29 +256,30 @@
             }
 
             var valid = true;
-            //if (row.find('td.email input').val()
-            //    .trim() ==
-            //    '' ||
-            //    !$.validateEmail(row.find('td.email input').val())) {
-            //    row.find('td.email input').addClass('error');
-            //    valid = false;
-            //} else {
-            //    row.find('td.email input').removeClass('error');
-            //}
+            if (row.find('td.email input').val().trim() == '') {
+                row.find('td.email input').removeClass('error');
+            }
+            else if (!$.validateEmail(row.find('td.email input').val()))
+            {
+                row.find('td.email input').addClass('error');
+                valid = false;
+            } else {
+                row.find('td.email input').removeClass('error');
+            }
 
-            //if (row.find('td.fName input').val().trim() == '') {
-            //    row.find('td.fName input').addClass('error');
-            //    valid = false;
-            //} else {
-            //    row.find('td.fName input').removeClass('error');
-            //}
+            if (row.find('td.gAcc input').val().trim() == '') {
+                row.find('td.gAcc input').addClass('error');
+               // valid = false;
+            } else {
+                row.find('td.gAcc input').removeClass('error');
+            }
 
-            //if (row.find('td.lName input').val().trim() == '') {
-            //    row.find('td.lName input').addClass('error');
-            //    valid = false;
-            //} else {
-            //    row.find('td.lName input').removeClass('error');
-            //}
+            if (row.find('td.tAcc input').val().trim() == '') {
+                row.find('td.tAcc input').addClass('error');
+                //valid = false;
+            } else {
+                row.find('td.tAcc input').removeClass('error');
+            }
 
             return valid;
         };
@@ -253,7 +290,7 @@
             return re.test(email);
         }
 
-        $.generateTable('@Html.Raw(JsonConvert.SerializeObject(Model.Developers).Replace("'", "\\'").Replace("\"", "\\\""))');
+        $.generateTable('@Html.Raw(JsonConvert.SerializeObject(Model.Developers).Replace("'", "\\'").Replace("\"", "\\\""))', '@Html.Raw(JsonConvert.SerializeObject(Model.Teams).Replace("'", "\\'").Replace("\"", "\\\""))' );
     });
-    </script>
+</script>
 }

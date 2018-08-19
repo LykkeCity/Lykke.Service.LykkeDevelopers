@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Lykke.Service.LykkeDevelopers.Core.User
+﻿namespace Lykke.Service.LykkeDevelopers.Core.Domain.User
 {
     public interface IUserEntity : IEntity
     {

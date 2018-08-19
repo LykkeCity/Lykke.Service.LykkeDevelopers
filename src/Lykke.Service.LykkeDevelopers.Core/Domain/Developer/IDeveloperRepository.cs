@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Lykke.Service.LykkeDevelopers.Core.Developer
+namespace Lykke.Service.LykkeDevelopers.Core.Domain.Developer
 {
     public interface IDeveloperRepository
     {
         /// <summary>
         /// Get developer by ID
         /// </summary>
-        /// <param name=devId">email</param>
+        /// <param name=devId">RowKey</param>
         /// <returns></returns>
         Task<IDeveloperEntity> GetDevAsync(string rowKey);
-        /// <summary>
-        /// Get user by developer by TelegramAcc
-        /// </summary>
-        /// <param name="telegramAcc">TelegramAcc</param>
-        /// <returns></returns>
-        Task<IDeveloperEntity> GetDevByTelegramAcc(string telegramAcc);
         /// <summary>
         /// Save developer
         /// </summary>
@@ -31,9 +23,9 @@ namespace Lykke.Service.LykkeDevelopers.Core.Developer
         /// <returns></returns>
         Task<List<IDeveloperEntity>> GetDevelopers();
         /// <summary>
-        /// REmove user by developer by ID
+        /// Remove developer by ID
         /// </summary>
-        /// <param name="devId">devId</param>
+        /// <param name="devId">RowKey</param>
         /// <returns></returns>
         Task<bool> RemoveDeveloper(string rowKey);
     }

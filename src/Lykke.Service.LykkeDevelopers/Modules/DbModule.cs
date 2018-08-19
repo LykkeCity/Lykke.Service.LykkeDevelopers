@@ -3,9 +3,11 @@ using AzureStorage.Tables;
 using Common.Log;
 using Lykke.Common.Log;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Developer;
+using Lykke.Service.LykkeDevelopers.AzureRepositories.Team;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.User;
-using Lykke.Service.LykkeDevelopers.Core.Developer;
-using Lykke.Service.LykkeDevelopers.Core.User;
+using Lykke.Service.LykkeDevelopers.Core.Domain.Developer;
+using Lykke.Service.LykkeDevelopers.Core.Domain.Team;
+using Lykke.Service.LykkeDevelopers.Core.Domain.User;
 using Lykke.Service.LykkeDevelopers.Settings;
 using Lykke.SettingsReader;
 
@@ -15,12 +17,10 @@ namespace Lykke.Service.LykkeDevelopers.Modules
     public class DbModule : Module
     {
         private readonly IReloadingManager<AppSettings> _appSettings;
-        private readonly ILog _log;
 
-        public DbModule(IReloadingManager<AppSettings> appSettings, ILog log)
+        public DbModule(IReloadingManager<AppSettings> appSettings)
         {
             _appSettings = appSettings;
-            _log = log;
 
         }
 
@@ -29,20 +29,26 @@ namespace Lykke.Service.LykkeDevelopers.Modules
             var connectionString = _appSettings.ConnectionString(x => x.LykkeDevelopersService.Db.ConnectionString);
             var userConnectionString = _appSettings.ConnectionString(x => x.LykkeDevelopersService.Db.UserConnectionString);
 
-            builder.RegisterInstance(_log)
-                .As<ILog>()
-                .SingleInstance();
+            builder.Register(c =>
+                new UserRepository(AzureTableStorage<UserEntity>.Create(userConnectionString,
+                        "User",
+                        c.Resolve<ILogFactory>())))
+                        .As<IUserRepository>()
+                        .SingleInstance();
 
-            // Do not register entire settings in container, pass necessary settings to services which requires them
-            builder.RegisterInstance(_appSettings.CurrentValue)
-                    .AsSelf()
-                    .SingleInstance();
+            builder.Register(c =>
+               new DeveloperRepository(AzureTableStorage<DeveloperEntity>.Create(userConnectionString,
+                       "Developer",
+                       c.Resolve<ILogFactory>())))
+                       .As<IDeveloperRepository>()
+                       .SingleInstance();
+            builder.Register(c =>
+               new TeamRepository(AzureTableStorage<TeamEntity>.Create(userConnectionString,
+                       "Team",
+                       c.Resolve<ILogFactory>())))
+                       .As<ITeamRepository>()
+                       .SingleInstance();
 
-            builder.RegisterInstance(new UserRepository(AzureTableStorage<UserEntity>.Create(connectionString, "User", _log)))
-                .As<IUserRepository>().SingleInstance();
-
-            builder.RegisterInstance(new DeveloperRepository(AzureTableStorage<DeveloperEntity>.Create(connectionString, "Developer", _log)))
-                .As<IDeveloperRepository>().SingleInstance();
         }
     }
 }

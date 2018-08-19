@@ -1,5 +1,5 @@
 ﻿using Lykke.Service.LykkeDevelopers.AzureRepositories.User;
-using Lykke.Service.LykkeDevelopers.Core.User;
+using Lykke.Service.LykkeDevelopers.Core.Domain.User;
 using Lykke.Service.LykkeDevelopers.Extentions;
 using Lykke.Service.LykkeDevelopers.Models;
 using Lykke.Service.LykkeDevelopers.Settings;
@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace Lykke.Service.LykkeDevelopers.Controllers
 {
     [Authorize]
-    [IgnoreLogAction]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AccountController : Controller
     {
         private string HomeUrl => Url.Action("Developers", "Home");
@@ -100,7 +100,6 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                     {
                         return View(new SignInModel());
                     }
-
                 }
 
                 var passwordHash = $"{password}{user.Salt}".GetHash();
@@ -133,41 +132,43 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
 
         
         [AllowAnonymous]
-        [HttpGet]
+        [Route("Account/AccessDenied")]
         public IActionResult AccessDenied()
         {
             return View();
         }
 
         [HttpGet]
+        [Route("Account/ChangePassword")]
         public IActionResult ChangePassword()
         {
             return View();
         }
 
         [HttpPost]
+        [Route("Account/ChangePassword")]
         public async Task<IActionResult> ChangePassword(string oldPassword, string password)
         {
             try
             {
-                //var user = await _userRepository.GetUserByUserEmail(UserInfo.UserEmail, oldPassword.GetHash());
+                var user = await _userRepository.GetUserByUserEmail(Request.HttpContext.GetUserEmail() ?? "anonymous", oldPassword.GetHash());
 
-                //if (user == null)
-                //{
-                //    ViewData["incorrectPassword"] = true;
-                //    return View();
-                //}
+                if (user == null)
+                {
+                    ViewData["incorrectPassword"] = true;
+                    return View();
+                }
 
-                //byte[] salt = new byte[128 / 8];
+                byte[] salt = new byte[128 / 8];
 
-                //using (var rng = RandomNumberGenerator.Create())
-                //{
-                //    rng.GetBytes(salt);
-                //}
+                using (var rng = RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(salt);
+                }
 
-                //user.Salt = Convert.ToBase64String(salt);
-                //user.PasswordHash = $"{password}{user.Salt}".GetHash();
-                //await _userRepository.SaveUser(user);
+                user.Salt = Convert.ToBase64String(salt);
+                user.PasswordHash = $"{password}{user.Salt}".GetHash();
+                await _userRepository.SaveUser(user);
 
                 return Redirect(HomeUrl);
             }
@@ -177,7 +178,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
             }
         }
 
-        [HttpGet]
+        [Route("Account/SignOut")]
         public async Task<IActionResult> SignOut()
         {
             try
