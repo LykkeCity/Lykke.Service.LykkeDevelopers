@@ -1,4 +1,11 @@
-﻿using Lykke.HttpClientGenerator;
+﻿using Lykke.Service.LykkeDevelopers.Client.Api;
+using Lykke.Service.LykkeDevelopers.Contract.Models;
+using Microsoft.Extensions.PlatformAbstractions;
+using Refit;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Lykke.Service.LykkeDevelopers.Client
 {
@@ -7,15 +14,47 @@ namespace Lykke.Service.LykkeDevelopers.Client
     /// </summary>
     public class LykkeDevelopersClient : ILykkeDevelopersClient
     {
-        // Note: Add similar Api properties for each new service controller
+        private readonly HttpClient _httpClient;
+        private readonly IHomeApi _homeApi;
+        private readonly ApiRunner _runner;
 
-        /// <summary>Inerface to LykkeDevelopers Api.</summary>
-        public ILykkeDevelopersApi Api { get; private set; }
-
-        /// <summary>C-tor</summary>
-        public LykkeDevelopersClient(IHttpClientGenerator httpClientGenerator)
+        public LykkeDevelopersClient(LykkeDevelopersServiceClientSettings settings)
         {
-            Api = httpClientGenerator.Generate<ILykkeDevelopersApi>();
+            if (settings == null)
+                throw new ArgumentNullException(nameof(settings));
+
+            if (String.IsNullOrEmpty(settings.ServiceUrl))
+                throw new ArgumentException("Service URL required");
+
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(settings.ServiceUrl),
+                DefaultRequestHeaders =
+                {
+                    {
+                        "User-Agent",
+                        $"{PlatformServices.Default.Application.ApplicationName}/{PlatformServices.Default.Application.ApplicationVersion}"
+                    }
+                }
+            };
+
+            _homeApi = RestService.For<IHomeApi>(_httpClient);
+            _runner = new ApiRunner();
+        }
+
+        public async Task<List<DeveloperModel>> GetDevelopersAsync()
+        {
+            return await _runner.RunAsync(() => _homeApi.GetAllDevs());
+        }
+
+        public async Task<List<DeveloperModel>> CreateDeveloperAsync(DeveloperModel model)
+        {
+            return await _runner.RunAsync(() => _homeApi.CreateAsync(model));
+        }
+
+        public async Task<string> Test(string id)
+        {
+            return await _runner.RunAsync(() => _homeApi.Test(id));
         }
     }
 }

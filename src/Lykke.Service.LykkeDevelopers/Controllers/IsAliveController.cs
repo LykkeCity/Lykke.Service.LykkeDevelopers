@@ -13,7 +13,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         /// Checks service is alive
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("IsAlive")]
         [SwaggerOperation("IsAlive")]
         [ProducesResponseType(typeof(IsAliveResponse), (int)HttpStatusCode.OK)]
         public IActionResult Get()

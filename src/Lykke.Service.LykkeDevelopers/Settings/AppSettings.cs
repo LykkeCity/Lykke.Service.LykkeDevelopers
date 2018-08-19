@@ -7,5 +7,6 @@ namespace Lykke.Service.LykkeDevelopers.Settings
     public class AppSettings : BaseAppSettings
     {
         public LykkeDevelopersSettings LykkeDevelopersService { get; set; }
+        public SlackNotificationSettings SlackNotifications { get; set; }
     }
 }

@@ -20,6 +20,15 @@ using Autofac.Extensions.DependencyInjection;
 using Lykke.Service.LykkeDevelopers.Modules;
 using Microsoft.Extensions.Configuration;
 using Lykke.Common.Log;
+using Swashbuckle.AspNetCore.Swagger;
+using Lykke.Common.ApiLibrary.Swagger;
+using Lykke.Service.LykkeDevelopers.Swagger;
+using Lykke.Common.ApiLibrary.Middleware;
+using Common.Log;
+using Lykke.SettingsReader;
+using Lykke.SlackNotification.AzureQueue;
+using Lykke.Logs;
+using AzureStorage.Tables;
 
 namespace Lykke.Service.LykkeDevelopers
 {
@@ -27,8 +36,9 @@ namespace Lykke.Service.LykkeDevelopers
     public class Startup
     {
         public IConfigurationRoot Configuration { get; }
-
+        public IContainer ApplicationContainer { get; private set; }
         public ILogFactory LogFactory { get; private set; }
+        public ILog Log { get; private set; }
 
 
         public Startup(IHostingEnvironment env)
@@ -42,11 +52,11 @@ namespace Lykke.Service.LykkeDevelopers
             Configuration = builder.Build();
         }
 
-        private readonly LykkeSwaggerOptions _swaggerOptions = new LykkeSwaggerOptions
-        {
-            ApiTitle = "LykkeDevelopers API",
-            ApiVersion = "v1"
-        };
+        //private readonly LykkeSwaggerOptions _swaggerOptions = new LykkeSwaggerOptions
+        //{
+        //    ApiTitle = "LykkeDevelopers API",
+        //    ApiVersion = "v1"
+        //};
 
         [UsedImplicitly]
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -79,52 +89,54 @@ namespace Lykke.Service.LykkeDevelopers
 
             services.AddMvc();
 
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc(
+                    "v1",
+                    new Info
+                    {
+                        Version = "v1",
+                        Title = "Lykke.Service.LykkeDevelopers API"
+                    });
+                options.DescribeAllEnumsAsStrings();
+                options.EnableXmsEnumExtension();
+                options.EnableXmlDocumentation();
+
+                options.OperationFilter<FileUploadOperation>();
+            });
+
             var builder = new ContainerBuilder();
 
-            builder.RegisterModule(new DbModule(_settings));
+            Log = CreateLogWithSlack(services, _settings);
+
+            builder.RegisterModule(new DbModule(_settings, Log));
             builder.Populate(services);
+            ApplicationContainer = builder.Build();
 
-            return services.BuildServiceProvider<AppSettings>(options =>
-            {
-                options.SwaggerOptions = _swaggerOptions;
+            return new AutofacServiceProvider(ApplicationContainer);
+            #region commented
+            //return services.BuildServiceProvider<AppSettings>(options =>
+            //{
+            //    //options.SwaggerOptions = _swaggerOptions;
+            //    options.Logs = logs =>
+            //    {
+            //        logs.AzureTableName = "LykkeDevelopersLog";
+            //        logs.AzureTableConnectionStringResolver = settings => settings.LykkeDevelopersService.Db.LogsConnString;
 
-                options.Logs = logs =>
-                {
-                    logs.AzureTableName = "LykkeDevelopersLog";
-                    logs.AzureTableConnectionStringResolver = settings => settings.LykkeDevelopersService.Db.LogsConnString;
-
-                    // TODO: You could add extended logging configuration here:
-                    /* 
-                    logs.Extended = extendedLogs =>
-                    {
-                        // For example, you could add additional slack channel like this:
-                        extendedLogs.AddAdditionalSlackChannel("LykkeDevelopers", channelOptions =>
-                        {
-                            channelOptions.MinLogLevel = LogLevel.Information;
-                        });
-                    };
-                    */
-                };
-
-                // TODO: Extend the service configuration
-                /*
-                options.Extend = (sc, settings) =>
-                {
-                    sc
-                        .AddOptions()
-                        .AddAuthentication(MyAuthOptions.AuthenticationScheme)
-                        .AddScheme<MyAuthOptions, KeyAuthHandler>(MyAuthOptions.AuthenticationScheme, null);
-                };
-                */
-
-                // TODO: You could add extended Swagger configuration here:
-                /*
-                options.Swagger = swagger =>
-                {
-                    swagger.IgnoreObsoleteActions();
-                };
-                */
-            });
+            //        // TODO: You could add extended logging configuration here:
+            //        /* 
+            //        logs.Extended = extendedLogs =>
+            //        {
+            //            // For example, you could add additional slack channel like this:
+            //            extendedLogs.AddAdditionalSlackChannel("LykkeDevelopers", channelOptions =>
+            //            {
+            //                channelOptions.MinLogLevel = LogLevel.Information;
+            //            });
+            //        };
+            //        */
+            //    };
+            //});
+            #endregion
         }
 
         [UsedImplicitly]
@@ -141,10 +153,23 @@ namespace Lykke.Service.LykkeDevelopers
                 app.UseHsts();
             }
 
+            app.UseLykkeMiddleware("Lykke.Service.LykkeDevelopers", ex => new
+            {
+                Message = "Technical problem"
+            });
+
             app.UseHttpsRedirection();
+            //app.UseSwagger(c =>
+            //{
+            //    c.PreSerializeFilters.Add((swagger, httpReq) => swagger.Host = httpReq.Host.Value);
+            //});
+            //app.UseSwaggerUI(x =>
+            //{
+            //    x.RoutePrefix = "swagger/ui";
+            //    x.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            //});
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseLykkeConfiguration();
 
             app.UseMvc(routes =>
             {
@@ -152,6 +177,56 @@ namespace Lykke.Service.LykkeDevelopers
                     name: "default",
                     template: "{controller=Home}/{action=Developers}/{id?}");
             });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(x =>
+            {
+                x.RoutePrefix = "swagger/ui";
+                x.SwaggerEndpoint("swagger/v1/swagger.json", "v1");
+            });
+        }
+
+        private static ILog CreateLogWithSlack(IServiceCollection services, IReloadingManager<AppSettings> settings)
+        {
+            var consoleLogger = new LogToConsole();
+            var aggregateLogger = new AggregateLogger();
+
+            aggregateLogger.AddLog(consoleLogger);
+
+            var vl = settings.CurrentValue;
+            Console.WriteLine(vl);
+
+            // Creating slack notification service, which logs own azure queue processing messages to aggregate log
+            var slackService =
+                services.UseSlackNotificationsSenderViaAzureQueue(settings.CurrentValue.SlackNotifications.AzureQueue,
+                    aggregateLogger);
+
+            var dbLogConnectionStringManager = settings.Nested(x => x.LykkeDevelopersService.Db.LogsConnString);
+            var dbLogConnectionString = dbLogConnectionStringManager.CurrentValue;
+
+            // Creating azure storage logger, which logs own messages to concole log
+            if (!string.IsNullOrEmpty(dbLogConnectionString) &&
+                !(dbLogConnectionString.StartsWith("${") && dbLogConnectionString.EndsWith("}")))
+            {
+                var persistenceManager = new LykkeLogToAzureStoragePersistenceManager(
+                    AzureTableStorage<LogEntity>.Create(dbLogConnectionStringManager, "PayInvoiceLog",
+                        consoleLogger),
+                    consoleLogger);
+
+                var slackNotificationsManager =
+                    new LykkeLogToAzureSlackNotificationsManager(slackService, consoleLogger);
+
+                var azureStorageLogger = new LykkeLogToAzureStorage(
+                    persistenceManager,
+                    slackNotificationsManager,
+                    consoleLogger);
+
+                azureStorageLogger.Start();
+
+                aggregateLogger.AddLog(azureStorageLogger);
+            }
+
+            return aggregateLogger;
         }
     }
 }

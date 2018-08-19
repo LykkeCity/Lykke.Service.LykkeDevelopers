@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using Lykke.AzureQueueIntegration;
 using Lykke.SettingsReader.Attributes;
 
 namespace Lykke.Service.LykkeDevelopers.Settings

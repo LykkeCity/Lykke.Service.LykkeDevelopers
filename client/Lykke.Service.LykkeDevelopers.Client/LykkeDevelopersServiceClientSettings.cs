@@ -1,14 +1,29 @@
-﻿using Lykke.SettingsReader.Attributes;
-
-namespace Lykke.Service.LykkeDevelopers.Client 
+﻿
+namespace Lykke.Service.LykkeDevelopers.Client
 {
     /// <summary>
-    /// LykkeDevelopers client settings.
+    /// Settings for <see cref="ILykkeDevelopersClient"/>.
     /// </summary>
-    public class LykkeDevelopersServiceClientSettings 
+    public class LykkeDevelopersServiceClientSettings
     {
-        /// <summary>Service url.</summary>
-        [HttpCheck("api/isalive")]
-        public string ServiceUrl {get; set;}
+        /// <summary>
+        /// Initializes a new instance of <see cref="LykkeDevelopersServiceClientSettings"/>.
+        /// </summary>
+        public LykkeDevelopersServiceClientSettings()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="LykkeDevelopersServiceClientSettings"/> with service url.
+        /// </summary>
+        public LykkeDevelopersServiceClientSettings(string serviceUrl)
+        {
+            ServiceUrl = serviceUrl;
+        }
+
+        /// <summary>
+        /// The service url.
+        /// </summary>
+        public string ServiceUrl { get; set; }
     }
 }

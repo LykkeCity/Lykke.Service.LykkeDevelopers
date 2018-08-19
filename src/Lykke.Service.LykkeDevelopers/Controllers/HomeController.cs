@@ -1,4 +1,5 @@
 ﻿using Lykke.Service.LykkeDevelopers.AzureRepositories.Developer;
+using Lykke.Service.LykkeDevelopers.Contract.Models;
 using Lykke.Service.LykkeDevelopers.Core.Developer;
 using Lykke.Service.LykkeDevelopers.Models;
 using Lykke.Service.LykkeDevelopers.Settings;
@@ -27,6 +28,13 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
             _appSettings = appSettings;
             _developerRepository = developerRepository;
 
+        }
+
+        [HttpGet]
+        [Route("Home/Test/{id}")]
+        public async Task<string> Test(string id)
+        {
+            return !String.IsNullOrEmpty(id) ? id : "TestNullValue";
         }
 
         [HttpGet]
@@ -78,18 +86,18 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
             var result = await _developerRepository.GetDevelopers();
 
             var devs = (from d in result
-                         let dev = d as DeveloperEntity
-                         //orderby dev.Email
-                         select new DeveloperModel
-                         {
-                             RowKey = dev.RowKey,
-                             Email = dev.Email,
-                             FirstName = dev.FirstName,
-                             LastName = dev.LastName,
-                             GithubAcc = dev.GithubAcc,
-                             Team = dev.Team,
-                             TelegramAcc = dev.TelegramAcc,
-                         }).ToList();
+                        let dev = d as DeveloperEntity
+                        //orderby dev.Email
+                        select new DeveloperModel
+                        {
+                            RowKey = dev.RowKey,
+                            Email = dev.Email,
+                            FirstName = dev.FirstName,
+                            LastName = dev.LastName,
+                            GithubAcc = dev.GithubAcc,
+                            Team = dev.Team,
+                            TelegramAcc = dev.TelegramAcc,
+                        }).ToList();
             return devs;
         }
     }

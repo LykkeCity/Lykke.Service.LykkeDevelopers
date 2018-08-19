@@ -20,6 +20,11 @@
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Lykke.Service.LykkeDevelopers.Client.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -28,6 +33,6 @@
     <PackageReference Include="Refit" Version="4.6.16" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\..\Lykke.Service.LykkeDevelopers.Contract\Lykke.Service.LykkeDevelopers.Contract.csproj" />
   </ItemGroup>
 </Project>

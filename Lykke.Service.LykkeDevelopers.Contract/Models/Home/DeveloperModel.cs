@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Lykke.Service.LykkeDevelopers.Models
+namespace Lykke.Service.LykkeDevelopers.Contract.Models
 {
     public class DeveloperModel
     {
