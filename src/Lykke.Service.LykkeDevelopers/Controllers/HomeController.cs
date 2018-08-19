@@ -34,7 +34,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         [Route("{id}")]
         public async Task<string> Test(string id)
         {
-            return !String.IsNullOrEmpty(id) ? id : "TestNullValue";
+            return !String.IsNullOrEmpty(id) ? id : "TestNullValue"; 
         }
 
         [HttpGet]
