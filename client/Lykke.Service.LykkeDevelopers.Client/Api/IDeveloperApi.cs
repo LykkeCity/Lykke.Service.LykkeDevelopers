@@ -1,4 +1,4 @@
-﻿using Lykke.Service.LykkeDevelopers.Contract.Models;
+﻿using Lykke.Service.LykkeDevelopers.Client.Models;
 using Refit;
 using System;
 using System.Collections.Generic;

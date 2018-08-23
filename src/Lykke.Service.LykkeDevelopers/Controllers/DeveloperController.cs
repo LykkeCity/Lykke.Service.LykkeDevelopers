@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Lykke.Service.LykkeDevelopers.Core.Domain.Developer;
 using Lykke.Service.LykkeDevelopers.Extentions;
 using System;
-using Lykke.Service.LykkeDevelopers.Contract.Models;
+using Lykke.Service.LykkeDevelopers.Client.Models;
 
 namespace Lykke.Service.LykkeDevelopers.Controllers
 {

@@ -1,5 +1,4 @@
 ﻿using Lykke.Service.LykkeDevelopers.AzureRepositories.Developer;
-using Lykke.Service.LykkeDevelopers.Contract.Models;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Team;
 using Lykke.Service.LykkeDevelopers.Core.Services;
 using Lykke.Service.LykkeDevelopers.Extentions;
@@ -11,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Lykke.Service.LykkeDevelopers.Client.Models;
 
 namespace Lykke.Service.LykkeDevelopers.Controllers
 {

@@ -1,5 +1,4 @@
 ﻿using Lykke.Service.LykkeDevelopers.Client.Api;
-using Lykke.Service.LykkeDevelopers.Contract.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

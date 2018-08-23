@@ -3,8 +3,6 @@ using JetBrains.Annotations;
 using Lykke.HttpClientGenerator;
 using Lykke.HttpClientGenerator.Infrastructure;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Lykke.Service.LykkeDevelopers.Client
 {

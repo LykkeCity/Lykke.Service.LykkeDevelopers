@@ -1,5 +1,4 @@
-﻿using Lykke.HttpClientGenerator;
-using Lykke.Service.LykkeDevelopers.Client.Api;
+﻿using Lykke.Service.LykkeDevelopers.Client.Api;
 
 namespace Lykke.Service.LykkeDevelopers.Client
 {
@@ -14,15 +13,11 @@ namespace Lykke.Service.LykkeDevelopers.Client
 
         public ITeamApi Team { get; set; }
 
-        public LykkeDevelopersClient(LykkeDevelopersServiceClientSettings settings)
-        {
-            Developer = httpClientGenerator.Generate<IDeveloperApi>();
-            Team = httpClientGenerator.Generate<ITeamApi>();
-        }
-
         public LykkeDevelopersClient(HttpClientGenerator.HttpClientGenerator httpClientGenerator)
         {
             this.httpClientGenerator = httpClientGenerator;
+            Developer = httpClientGenerator.Generate<IDeveloperApi>();
+            Team = httpClientGenerator.Generate<ITeamApi>();
         }
     }
 }

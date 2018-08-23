@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <IsPackable>true</IsPackable>
-    <Version>1.0.2</Version>
+    <Version>1.0.4</Version>
     <Authors>Lykke</Authors>
     <Company>Lykke</Company>
     <Product>Lykke.Service.LykkeDevelopers</Product>
@@ -13,6 +13,8 @@
     <RepositoryUrl>https://github.com/LykkeCity/Lykke.Service.LykkeDevelopers.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Lykke</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>Lykke.Service.LykkeDevelopers-test</PackageId>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
@@ -29,11 +31,12 @@
     <None Remove="Lykke.Service.LykkeDevelopers.Client.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\DeveloperModel.cs" />
+    <Compile Include="Models\TeamModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Lykke.HttpClientGenerator" Version="2.1.0" />
     <PackageReference Include="Lykke.SettingsReader" Version="2.4.1" />
     <PackageReference Include="Refit" Version="4.6.16" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Lykke.Service.LykkeDevelopers.Contract\Lykke.Service.LykkeDevelopers.Contract.csproj" />
   </ItemGroup>
 </Project>
