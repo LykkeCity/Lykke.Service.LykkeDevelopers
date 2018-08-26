@@ -1,19 +1,15 @@
-﻿using Lykke.Common.Api.Contract.Responses;
+﻿using AutoMapper;
+using Lykke.Common.Api.Contract.Responses;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Developer;
+using Lykke.Service.LykkeDevelopers.AzureRepositories.Team;
+using Lykke.Service.LykkeDevelopers.Client.Models;
 using Lykke.Service.LykkeDevelopers.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using AutoMapper;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Lykke.Service.LykkeDevelopers.Core.Domain.Developer;
-using Lykke.Service.LykkeDevelopers.Extentions;
 using System;
-using Lykke.Service.LykkeDevelopers.Client.Models;
-using Lykke.Service.LykkeDevelopers.AzureRepositories.Team;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Lykke.Service.LykkeDevelopers.Controllers
 {

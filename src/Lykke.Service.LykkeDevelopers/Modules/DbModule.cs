@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using AzureStorage.Tables;
-using Common.Log;
 using Lykke.Common.Log;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Developer;
 using Lykke.Service.LykkeDevelopers.AzureRepositories.Team;
