@@ -46,24 +46,34 @@ namespace Lykke.Service.LykkeDevelopers.AzureRepositories.Team
         {
             try
             {
-                var teamToSave = (TeamEntity)team;
-                if (String.IsNullOrWhiteSpace(teamToSave.RowKey))
+                if (!String.IsNullOrWhiteSpace(team.Name))
                 {
-                    teamToSave.RowKey = Guid.NewGuid().ToString();
-                }
+                    var teamToSave = (TeamEntity)team;
+                    if (String.IsNullOrWhiteSpace(teamToSave.RowKey))
+                    {
+                        var teamsList = await GetTeams();
+                        if (teamsList.Where(t => t.Name == team.Name).Any())
+                        {
+                            return true;
+                        }
+                        teamToSave.RowKey = Guid.NewGuid().ToString();
+                    }
 
-                if (String.IsNullOrWhiteSpace(teamToSave.PartitionKey))
-                {
-                    teamToSave.PartitionKey = TeamEntity.GeneratePartitionKey();
+                    if (String.IsNullOrWhiteSpace(teamToSave.PartitionKey))
+                    {
+                        teamToSave.PartitionKey = TeamEntity.GeneratePartitionKey();
+                    }
+                    await _tableStorage.InsertOrMergeAsync(teamToSave);
+
+                    return true;
                 }
-                await _tableStorage.InsertOrMergeAsync(teamToSave);
+                return false;
+
             }
             catch
             {
                 return false;
-            }
-
-            return true;
+            }            
         }
     }
 }

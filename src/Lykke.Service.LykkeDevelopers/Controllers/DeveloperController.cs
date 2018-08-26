@@ -13,6 +13,7 @@ using Lykke.Service.LykkeDevelopers.Core.Domain.Developer;
 using Lykke.Service.LykkeDevelopers.Extentions;
 using System;
 using Lykke.Service.LykkeDevelopers.Client.Models;
+using Lykke.Service.LykkeDevelopers.AzureRepositories.Team;
 
 namespace Lykke.Service.LykkeDevelopers.Controllers
 {
@@ -20,10 +21,12 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
     public class DeveloperController : Controller
     {
         private readonly IDevelopersService _developersService;
+        private readonly ITeamsService _teamsService;
 
-        public DeveloperController(IDevelopersService developersService)
+        public DeveloperController(IDevelopersService developersService, ITeamsService teamsService)
         {
             _developersService = developersService;
+            _teamsService = teamsService;
         }
 
         /// <summary>
@@ -133,9 +136,9 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         [SwaggerOperation("SaveDeveloper")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        public async Task<bool> SaveDeveloper(DeveloperModel developer)
+        public async Task<bool> SaveDeveloper([FromBody] DeveloperModel developer)
         {
-            var checkDev = await GetDevelopers();
+            
             if (String.IsNullOrWhiteSpace(developer.RowKey))
             {
                 developer.RowKey = "";
@@ -156,6 +159,17 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
                 developer.GithubAcc = "";
             }
 
+            if (String.IsNullOrWhiteSpace(developer.FirstName))
+            {
+                developer.FirstName = "";
+            }
+
+            if (String.IsNullOrWhiteSpace(developer.LastName))
+            {
+                developer.LastName = "";
+            }
+
+            var checkDev = await GetDevelopers();
             foreach (var devToCheck in checkDev)
             {
                 if (devToCheck.RowKey != developer.RowKey)
@@ -181,6 +195,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
             devToSave.LastName = developer.LastName;
             devToSave.TelegramAcc = developer.TelegramAcc;
             devToSave.GithubAcc = developer.GithubAcc;
+            await _teamsService.SaveTeamAsync(new TeamEntity() { Name = developer.Team });
             devToSave.Team = developer.Team;
 
             return await _developersService.SaveDeveloperAsync(devToSave);

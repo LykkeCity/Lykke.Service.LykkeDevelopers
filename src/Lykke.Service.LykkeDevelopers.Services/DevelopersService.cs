@@ -4,6 +4,7 @@ using Lykke.Service.LykkeDevelopers.Core.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System;
 
 namespace Lykke.Service.LykkeDevelopers.Services
 {
@@ -55,9 +56,16 @@ namespace Lykke.Service.LykkeDevelopers.Services
             return _developerRepository.RemoveDeveloper(rowKey);
         }
 
-        public Task<bool> SaveDeveloperAsync(IDeveloperEntity developer)
+        public async Task<bool> SaveDeveloperAsync(IDeveloperEntity developer)
         {
-            return _developerRepository.SaveDeveloper(developer);
+            if (!String.IsNullOrWhiteSpace(developer.Team) && String.IsNullOrWhiteSpace(developer.TeamID))
+            {
+                var teams = await _teamRepository.GetTeams();
+                var teamID = teams.Where(t => t.Name == developer.Team).FirstOrDefault();
+                if (teamID != null)
+                    developer.TeamID = teamID.RowKey;
+            }
+            return await _developerRepository.SaveDeveloper(developer);
         }
     }
 }

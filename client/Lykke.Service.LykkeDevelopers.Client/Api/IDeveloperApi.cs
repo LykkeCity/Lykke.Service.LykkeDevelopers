@@ -61,7 +61,7 @@ namespace Lykke.Service.LykkeDevelopers.Client.Api
         /// </summary>
         /// <param name="devID">devID</param>
         /// <returns></returns>
-        [Get("/Api/Developer/RemoveDeveloper")]
+        [Post("/Api/Developer/RemoveDeveloper")]
         Task<bool> RemoveDeveloper(string devID);
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Lykke.Service.LykkeDevelopers.Client.Api
         /// </summary>
         /// <param name="developer">DeveloperModel</param>
         /// <returns></returns>
-        [Get("/Api/Developer/SaveDeveloper")]
-        Task<bool> SaveDeveloper(DeveloperModel developer);
+        [Post("/Api/Developer/SaveDeveloper")]
+        Task<bool> SaveDeveloper([Body] DeveloperModel developer);
     }
 }

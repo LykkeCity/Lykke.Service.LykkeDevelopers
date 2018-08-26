@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <IsPackable>true</IsPackable>
-    <Version>1.0.4</Version>
+    <Version>1.0.9</Version>
     <Authors>Lykke</Authors>
     <Company>Lykke</Company>
     <Product>Lykke.Service.LykkeDevelopers</Product>

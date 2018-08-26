@@ -17,6 +17,7 @@ namespace Lykke.Service.LykkeDevelopers.AzureRepositories.Developer
         public string TelegramAcc { get; set; }
         public string GithubAcc { get; set; }
         public string Team { get; set; }
+        public string TeamID { get; set; }
 
         public override void ReadEntity(IDictionary<string, EntityProperty> properties, OperationContext operationContext)
         {
@@ -50,6 +51,11 @@ namespace Lykke.Service.LykkeDevelopers.AzureRepositories.Developer
                 Team = team.StringValue;
             }
 
+            if (properties.TryGetValue("TeamID", out var teamID))
+            {
+                TeamID = teamID.StringValue;
+            }
+
         }
 
         public override IDictionary<string, EntityProperty> WriteEntity(OperationContext operationContext)
@@ -61,7 +67,8 @@ namespace Lykke.Service.LykkeDevelopers.AzureRepositories.Developer
                 {"FirstName", new EntityProperty(FirstName)},
                 {"LastName", new EntityProperty(LastName)},
                 {"GithubAcc", new EntityProperty(GithubAcc)},
-                {"Team", new EntityProperty(Team)}
+                {"Team", new EntityProperty(Team)},
+                {"TeamID", new EntityProperty(TeamID)}
             };
 
             return dict;

@@ -36,15 +36,15 @@ namespace Lykke.Service.LykkeDevelopers.Client.Api
         /// </summary>
         /// <param team="team">Team Model</param>
         /// <returns></returns>
-        [Get("/Api/Team/SaveTeam")]
-        Task<bool> SaveTeam(TeamModel team);
+        [Post("/Api/Team/SaveTeam")]
+        Task<bool> SaveTeam([Body] TeamModel team);
 
         /// <summary>
         /// Remove team by ID
         /// </summary>
         /// <param name="teamId">devID</param>
         /// <returns></returns>
-        [Get("/Api/Team/RemoveTeam")]
+        [Post("/Api/Team/RemoveTeam")]
         Task<bool> RemoveTeam(string teamId);
     }
 }

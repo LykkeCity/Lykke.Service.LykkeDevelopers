@@ -66,10 +66,10 @@
                 var elem = list[i];
                 html += '<tr elemId="' + elem.RowKey + '"> ' +
                     '<td class="col-md-2 email"><span class="viewMode">' + elem.Email + '</span><input type="text" class="editMode form-control"/></td>' +
-                    '<td class="col-md-2 fName"><span class="viewMode">' + elem.FirstName + '</span><input type="text" class="editMode form-control"/></td>' +
-                    '<td class="col-md-2 lName"><span class="viewMode">' + elem.LastName + '</span><input type="text" class="editMode form-control"/></td>' +
-                    '<td class="col-md-2 tAcc"><span class="viewMode">' + elem.TelegramAcc + '</span><input type="text" class="editMode form-control"/></td>' +
-                    '<td class="col-md-2 gAcc"><span class="viewMode">' + elem.GithubAcc + '</span><input type="text" class="editMode form-control"/></td>' +
+                    '<td class="fName"><span class="viewMode">' + elem.FirstName + '</span><input type="text" class="editMode form-control"/></td>' +
+                    '<td class="lName"><span class="viewMode">' + elem.LastName + '</span><input type="text" class="editMode form-control"/></td>' +
+                    '<td class="tAcc"><span class="viewMode">' + elem.TelegramAcc + '</span><input type="text" class="editMode form-control"/></td>' +
+                    '<td class="gAcc"><span class="viewMode">' + elem.GithubAcc + '</span><input type="text" class="editMode form-control"/></td>' +
                     '<td class="col-md-2 team"><span class="viewMode team1 ' + (elem.Team == 'Team was removed' ? 'red': '') + '">' + elem.Team + '</span>' +
                     '<span class="editMode"><select class="team-select" name="state">';
                 for (var j = 0; j < listTeams.length; j++) {
@@ -89,10 +89,10 @@
             html +=
                 '<tr elemId="*">' +
                 '<td class="col-md-2 email"><input class="form-control" placeholder="Email" type="text"/></td>' +
-                '<td class="col-md-2 fName"><input class="form-control" placeholder="First Name"  type="text"/></td>' +
-                '<td class="col-md-2 lName"><input class="form-control" placeholder="Last Name" type="text" /></td>' +
-                '<td class="col-md-2 tAcc"><input class="form-control" placeholder="Telegram account" type="text" /></td>' +
-                '<td class="col-md-2 gAcc"><input class="form-control" placeholder="Github account" type="text" /></td>' +
+                '<td class="fName"><input class="form-control" placeholder="First Name"  type="text"/></td>' +
+                '<td class="lName"><input class="form-control" placeholder="Last Name" type="text" /></td>' +
+                '<td class="tAcc"><input class="form-control" placeholder="Telegram account" type="text" /></td>' +
+                '<td class="gAcc"><input class="form-control" placeholder="Github account" type="text" /></td>' +
                 '<td class="col-md-2 team">' +
                 '<select class="team-select form-control" name="state">';
             for (var j = 0; j < listTeams.length; j++) {

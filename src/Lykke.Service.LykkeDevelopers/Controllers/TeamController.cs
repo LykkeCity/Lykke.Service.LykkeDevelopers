@@ -72,7 +72,7 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         [SwaggerOperation("SaveTeam")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        public async Task<bool> SaveTeam(TeamModel team)
+        public async Task<bool> SaveTeam([FromBody] TeamModel team)
         {
             if (String.IsNullOrWhiteSpace(team.Name))
             {

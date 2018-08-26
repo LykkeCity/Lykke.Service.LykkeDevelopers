@@ -8,5 +8,6 @@
         string TelegramAcc { get; set; }
         string GithubAcc { get; set; }
         string Team { get; set; }
+        string TeamID { get; set; }
     }
 }
