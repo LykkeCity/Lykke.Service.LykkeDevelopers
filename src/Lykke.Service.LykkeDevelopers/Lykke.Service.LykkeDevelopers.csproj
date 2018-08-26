@@ -44,6 +44,11 @@
     <ProjectReference Include="..\Lykke.Service.LykkeDevelopers.Core\Lykke.Service.LykkeDevelopers.Core.csproj" />
     <ProjectReference Include="..\Lykke.Service.LykkeDevelopers.Services\Lykke.Service.LykkeDevelopers.Services.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Dockerfile">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <ItemGroup>
       <DocFile Include="$(OutputPath)$(AssemblyName).xml" />
