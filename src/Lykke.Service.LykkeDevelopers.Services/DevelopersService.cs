@@ -65,6 +65,14 @@ namespace Lykke.Service.LykkeDevelopers.Services
                 if (teamID != null)
                     developer.TeamID = teamID.RowKey;
             }
+            else if(String.IsNullOrWhiteSpace(developer.Team) && !String.IsNullOrWhiteSpace(developer.TeamID))
+            {
+                var teams = await _teamRepository.GetTeams();
+                var teamName = teams.Where(t => t.RowKey == developer.TeamID).FirstOrDefault();
+                if (teamName != null)
+                    developer.Team = teamName.Name;
+            }
+
             return await _developerRepository.SaveDeveloper(developer);
         }
     }
