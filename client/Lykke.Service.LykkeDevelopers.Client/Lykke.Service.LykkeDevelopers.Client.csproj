@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <IsPackable>true</IsPackable>
-    <Version>1.0.9</Version>
+    <Version>1.0.11</Version>
     <Authors>Lykke</Authors>
     <Company>Lykke</Company>
     <Product>Lykke.Service.LykkeDevelopers</Product>
@@ -13,8 +13,10 @@
     <RepositoryUrl>https://github.com/LykkeCity/Lykke.Service.LykkeDevelopers.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Lykke</PackageTags>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Lykke.Service.LykkeDevelopers-test</PackageId>
+    <AssemblyVersion>1.0.11.0</AssemblyVersion>
+    <FileVersion>1.0.11.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>

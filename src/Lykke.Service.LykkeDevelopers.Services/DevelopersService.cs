@@ -37,6 +37,12 @@ namespace Lykke.Service.LykkeDevelopers.Services
             return devs.Where(d => d.Team == teamName).ToList();
         }
 
+        public async Task<IDeveloperEntity> GetDeveloperByGitAcc(string githubAcc)
+        {
+            var devs = await _developerRepository.GetDevelopers();
+            return devs.Where(d => d.GithubAcc == githubAcc).FirstOrDefault();
+        }
+
         public async Task<ITeamEntity> GetDeveloperTeamAsync(string telegramAcc)
         {
             var devs = await _developerRepository.GetDevelopers();

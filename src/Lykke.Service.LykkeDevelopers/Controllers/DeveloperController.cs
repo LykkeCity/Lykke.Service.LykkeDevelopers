@@ -92,6 +92,21 @@ namespace Lykke.Service.LykkeDevelopers.Controllers
         }
 
         /// <summary>
+        /// Get developer by GitHub account
+        /// </summary>
+        /// <param name="githubAcc">GitHubAcc</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetDeveloperByGitAcc/{githubAcc}")]
+        [SwaggerOperation("GetDeveloperByGitAcc")]
+        [ProducesResponseType(typeof(TeamModel), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        public async Task<DeveloperModel> GetDeveloperByGitAcc(string githubAcc)
+        {
+            var dev = await _developersService.GetDeveloperByGitAcc(githubAcc);
+            return Mapper.Map<DeveloperModel>(dev);
+        }
+        /// <summary>
         /// If developer in this team returns true
         /// </summary>
         /// <param name="telegramAcc">telegramAcc</param>

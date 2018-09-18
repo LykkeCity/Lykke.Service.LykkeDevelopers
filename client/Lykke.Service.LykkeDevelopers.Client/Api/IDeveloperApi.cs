@@ -40,6 +40,14 @@ namespace Lykke.Service.LykkeDevelopers.Client.Api
         Task<List<DeveloperModel>> GetDevelopersByTeam(string teamName);
 
         /// <summary>
+        /// Get developer by GitHub account
+        /// </summary>
+        /// <param name="githubAcc">GitHub</param>
+        /// <returns></returns>
+        [Get("/Api/Developer/GetDeveloperByGitAcc/{githubAcc}")]
+        Task<DeveloperModel> GetDeveloperByGitAcc(string githubAcc);
+
+        /// <summary>
         /// Gets developers team by telegram account
         /// </summary>
         /// <param name="telegramAcc">telegramAcc</param>

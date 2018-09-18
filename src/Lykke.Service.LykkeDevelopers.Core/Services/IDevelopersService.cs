@@ -12,6 +12,7 @@ namespace Lykke.Service.LykkeDevelopers.Core.Services
         Task<List<IDeveloperEntity>> GetDevelopersAsync();
         Task<bool> RemoveDeveloperAsync(string rowKey);
         Task<bool> IsDeveloperInTeamAsync(string telegramAcc, string teamName);
+        Task<IDeveloperEntity> GetDeveloperByGitAcc(string githubAcc);
         Task<ITeamEntity> GetDeveloperTeamAsync(string telegramAcc);
         Task<List<IDeveloperEntity>> GetDevelopersByTeamAsync(string teamName);
     }
