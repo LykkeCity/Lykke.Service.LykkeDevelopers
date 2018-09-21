@@ -34,27 +34,27 @@ namespace Lykke.Service.LykkeDevelopers.Services
         public async Task<List<IDeveloperEntity>> GetDevelopersByTeamAsync(string teamName)
         {
             var devs = await _developerRepository.GetDevelopers();
-            return devs.Where(d => d.Team == teamName).ToList();
+            return devs.Where(d => d.Team.ToLower() == teamName.ToLower()).ToList();
         }
 
         public async Task<IDeveloperEntity> GetDeveloperByGitAcc(string githubAcc)
         {
             var devs = await _developerRepository.GetDevelopers();
-            return devs.Where(d => d.GithubAcc == githubAcc).FirstOrDefault();
+            return devs.Where(d => d.GithubAcc.ToLower() == githubAcc.ToLower()).FirstOrDefault();
         }
 
         public async Task<ITeamEntity> GetDeveloperTeamAsync(string telegramAcc)
         {
             var devs = await _developerRepository.GetDevelopers();
-            var dev = devs.Where(d => d.TelegramAcc == telegramAcc).FirstOrDefault();
+            var dev = devs.Where(d => d.TelegramAcc.ToLower() == telegramAcc.ToLower()).FirstOrDefault();
             var teams = await _teamRepository.GetTeams();
-            return teams.Where(t => t.Name == dev.Team).FirstOrDefault();
+            return teams.Where(t => t.Name.ToLower() == dev.Team.ToLower()).FirstOrDefault();
         }
 
         public async Task<bool> IsDeveloperInTeamAsync(string telegramAcc, string teamName)
         {
             var devTeam = await GetDeveloperTeamAsync(telegramAcc);
-            return devTeam.Name == teamName ? false : true;
+            return devTeam.Name.ToLower() == teamName.ToLower() ? false : true;
         }
 
         public Task<bool> RemoveDeveloperAsync(string rowKey)
@@ -67,7 +67,7 @@ namespace Lykke.Service.LykkeDevelopers.Services
             if (!String.IsNullOrWhiteSpace(developer.Team) && String.IsNullOrWhiteSpace(developer.TeamID))
             {
                 var teams = await _teamRepository.GetTeams();
-                var teamID = teams.Where(t => t.Name == developer.Team).FirstOrDefault();
+                var teamID = teams.Where(t => t.Name.ToLower() == developer.Team.ToLower()).FirstOrDefault();
                 if (teamID != null)
                     developer.TeamID = teamID.RowKey;
             }
